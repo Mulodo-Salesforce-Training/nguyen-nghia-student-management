@@ -1,0 +1,10 @@
+.
+.apex/
+.idea/
+.sdk/
+Student_Management.iml
+# Unused Lightning Component
+src/aura
+src/components
+#Ignore Mulodo Recruitment App
+src/**/MR_**

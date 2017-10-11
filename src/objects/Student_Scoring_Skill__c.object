@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Points__c</fullName>
+        <externalId>false</externalId>
+        <label>Points</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Skill__c</fullName>
+        <externalId>false</externalId>
+        <label>Skill</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>Skill_List</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Student_ID__c</fullName>
+        <externalId>false</externalId>
+        <label>Student ID</label>
+        <referenceTo>Student__c</referenceTo>
+        <relationshipLabel>Student Scoring Skills</relationshipLabel>
+        <relationshipName>Student_Scoring_Skills</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>Student Scoring Skill</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>SK-{0000}</displayFormat>
+        <label>Student Scoring Skill Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Student Scoring Skills</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Java</fullName>
+        <active>true</active>
+        <description>Record Type for Java</description>
+        <label>Java</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Caching</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Java Basic Knowledge</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>OOP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oracle DB</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Redis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Spring framework</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>PHP</fullName>
+        <active>true</active>
+        <description>Record type for PHP Scoring</description>
+        <label>PHP</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Caching</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Laravel framework</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>OOP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PHP Basic Knowledge</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Redis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>mySQL</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Salesforce</fullName>
+        <active>true</active>
+        <description>Record type for Salesforce</description>
+        <label>Salesforce</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Admin Beginner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Admin Intermediate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Automate Your Business Processes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Build Apps Fast with Salesforce Platform Services</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Developer Beginner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Get Started with Lightning Experience</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Get Started with Salesforce DX</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Learn CRM Essentials for Salesforce Classic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make the Move to Lightning Experience</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Protect Your Salesforce Data</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rock Your Future with Salesforce</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>
