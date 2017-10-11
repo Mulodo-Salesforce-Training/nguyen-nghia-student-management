@@ -10,3 +10,4 @@ src/components
 src/classes/MR_*.*
 src/pages/MR_*
 src/staticresources/MRCandidateFormRemotingJS.resource
+src/triggers/MR_*
