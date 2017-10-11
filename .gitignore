@@ -7,4 +7,5 @@ Student_Management.iml
 src/aura
 src/components
 #Ignore Mulodo Recruitment App
-src/**/MR_**
+src/classes/MR_*.*
+src/pages/MR_*
