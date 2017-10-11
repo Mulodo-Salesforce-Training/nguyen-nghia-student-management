@@ -11,3 +11,10 @@ src/classes/MR_*.*
 src/pages/MR_*
 src/staticresources/MRCandidateFormRemotingJS.resource
 src/triggers/MR_*
+src/classes/LightningConnectQuickstart.cls
+src/classes/LightningConnectQuickstart.cls-meta.xml
+src/classes/TestLightningConnectQuickstart.cls
+src/classes/TestLightningConnectQuickstart.cls-meta.xml
+src/pages/LightningConnectQuickstart.page
+src/pages/LightningConnectQuickstart.page-meta.xml
+src/staticresources/MRCandidateFormRemotingJS.resource-meta.xml
