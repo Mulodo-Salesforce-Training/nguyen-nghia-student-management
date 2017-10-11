@@ -9,3 +9,4 @@ src/components
 #Ignore Mulodo Recruitment App
 src/classes/MR_*.*
 src/pages/MR_*
+src/staticresources/MRCandidateFormRemotingJS.resource
