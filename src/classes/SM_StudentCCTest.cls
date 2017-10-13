@@ -53,16 +53,16 @@ private class SM_StudentCCTest {
 	}
 
 	@isTest static void testChangeSelectedStatus() {
-		List<Student__c> targetStudent = [SELECT Status__c FROM Student__c LIMIT 1];
 		List<Id> targetIdList = new List<Id>();
-		for(Student__c student: targetStudent) {
+		for(Student__c student: [SELECT Status__c FROM Student__c LIMIT 1]) {
 			targetIdList.add(student.Id);
 		}
+
 		Test.startTest();
-		SM_StudentCC.changeSelectedStatus(targetIdList, 'Working');
+			SM_StudentCC.changeSelectedStatus(targetIdList, 'Working');
 		Test.stopTest();
-		Student__c updateStudent = [SELECT Status__c FROM Student__c WHERE Id =: targetStudent[0].Id];
-		System.debug(updateStudent);
+
+		Student__c updateStudent = [SELECT Status__c FROM Student__c WHERE Id =: targetIdList[0]];
 		System.assert(updateStudent.Status__c == 'Working', 'Student with id : ' + updateStudent.Id + ' should has status is working after update');
 
 

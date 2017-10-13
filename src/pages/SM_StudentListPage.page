@@ -71,7 +71,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="student in students track by $index">
+                    <tr ng-repeat="student in students track by $index" ng-click="onSelectStudent(student.Id)"
+                        ng-class="{'slsd-is-selected': selectedList.has(student.Id)}">
                         <th scope="col" data-label="Index">
                                 {{$index}}
                         </th>
@@ -238,6 +239,13 @@
             );
         }
 
+        function changeSelectedStatus(callback, studentList, selectedStatus) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.SM_StudentCC.changeSelectedStatus}',
+                    ``, selectedStatus, callback, {'escape': false}
+            );
+        }
+
 
         function redirectToImportWizard() {
             window.location.href = 'https://mulodo-recruitment-dev-ed.lightning.force.com/one/one.app?source=aloha#eyJjb21wb25lbnREZWYiOiJvbmU6YWxvaGFQYWdlIiwiYXR0cmlidXRlcyI6eyJ2YWx1ZXMiOnsiYWRkcmVzcyI6Ii91aS9zZXR1cC9kYXRhaW1wb3J0ZXIvRGF0YUltcG9ydGVyQWRtaW5MYW5kaW5nUGFnZT9yZXRVUkw9JTJGc2V0dXAlMkZob21lJnZmUmV0VVJMSW5TRlg9aHR0cHMlM0ElMkYlMkZtdWxvZG8tcmVjcnVpdG1lbnQtZGV2LWVkLmxpZ2h0bmluZy5mb3JjZS5jb20lMkZvbmUlMkZvbmUuYXBwJTNGc291cmNlJTNEYWxvaGElMjMlMkZzZXR1cCUyRnBhZ2UlM0Zub2RlSWQlM0RMYWJlbFdvcmtiZW5jaFNldHVwJTI2YWRkcmVzcyUzRCUyNTJGaTE4biUyNTJGVHJhbnNsYXRpb25TcGxhc2guYXBleHAlMjUzRnJldFVSTCUyNTNEJTI1MjUyRnNldHVwJTI1MjUyRmhvbWUlMjZhJTNBdCUzRDE1MDc4NzY3MjIxODciLCJoYXNIaXN0b3J5Ijp0cnVlfX0sImE6dCI6MTUwNzg3NjcyMzQ3MX0%3D'; // link to import page
@@ -255,17 +263,35 @@
                         }, pageSize, pageNum);
                         return deferred.promise;
                     };
+                    factory.changeSelectedStatus = (studentIdList, selectedStatus) => {
+                        let deferred = $q.defer();
+                        changeSelectedStatus((res) => {
+                            console.log('res: ', res); // method from controller return void
+                            /** @TODO: We will add feature to notification later */
+                        }, studentIdList, selectedStatus);
+                        return deferred.promise;
+                    };
                     return factory;
                 })
-                .controller('listStudentController', ($scope, VFRemotingFactory) => {
+                .service('selectedStudentService', function (){
+                    var selectedStudent = [];
+                    return {
+                        getSelectedStudents: () => selectedStudent,
+                        setSelectedStudents: (list) => {selectedStudent = list}
+                    }
+                })
+                .controller('listStudentController', ['$scope', 'VFRemotingFactory', 'selectedStudentService', ($scope, VFRemotingFactory, selectedStudentService) => {
+//                    console.log('Demo Service: ', demoService.getSelectedStudents());
+                    // declaration
                     $scope.pageSize = 5;
                     $scope.currentPage = 0;
-                    $scope.statusPickList = {!statusPickList}; // Initial value of Status Pick List
                     $scope.isModalOpen = false; // UI Control of modal pop up
-                    // init - constructor
+                    $scope.selectedList = new Set(); // UI Control of Selected List
                     VFRemotingFactory.getData($scope.pageSize, $scope.currentPage).then(res => {
                         $scope.students = res;
                     });
+//                    $scope.students = StudentService.getStudentList();
+                    // init - constructor
 
                     // event declaration
                     $scope.onChangeStatusClick = () => {
@@ -279,9 +305,32 @@
                     // save click
                     $scope.onSaveModalClick = () => {
                         $scope.isModalOpen = false;
+                    };
+
+                    $scope.onSelectStudent = (id) => {
+                        console.log('Id: ', id);
+                        if (!$scope.selectedList.has(id)) {
+                            $scope.selectedList.add(id);
+                            console.log('Add');
+                        } else {
+                            $scope.selectedList.delete(id);
+                            console.log('Remove');
+                        }
                     }
 
-                });
+
+                }])
+                .controller('modalController', [
+                    '$scope', 'selectedStudentService',($scope, selectedStudentService) => {
+                        $scope.isPickListOpen = false; // UI Control of pickList inside Modal pop up
+                        $scope.statusPickList = {!statusPickList}; // Initial value of Status Pick List
+                        console.log(demoService.getSelectedStudents());
+
+                        $scope.onSubmitChangeStatus = () => {
+
+                        }
+                    }
+                ])
     </script>
 
     </body>
