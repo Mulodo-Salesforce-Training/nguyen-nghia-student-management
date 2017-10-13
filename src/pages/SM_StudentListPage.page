@@ -1,0 +1,289 @@
+<apex:page tabStyle="Student_List__tab"
+           controller="SM_StudentCC"
+>
+    <!--ADD XMLNS TO USE SVG FROM VISUALFORCE-->
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Student List</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Import the Design System style sheet -->
+        <apex:slds />
+        <apex:includeScript value="{!URLFOR($Resource.angular_min_js)}"/>
+    </head>
+
+    <body ng-app="mainApp">
+    <!--Wrap all div in this to apply stylesheet from slds-->
+        <div class="slds-scope"  ng-controller="listStudentController">
+            <div class="slds-page-header">
+                <div class="slds-media">
+                    <div class="slds-media__body">
+                        <h1 class="slds-page-header__title slds-truncate slds-align-middle"
+                            title="Candidates Custom List">
+                            Students List
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <!--TOP BUTTON LIST-->
+            <div class="slds-grid slds-grid_align-end slds-m-top_x-small slds-m-bottom_x-small">
+                <!--CLASS APPLY:-->
+                <!--SLDS: GRID ==> FORMAT AS GRID-->
+                <!--SLDS-GRID_ALIGN_END: ===> FLOAT RIGHT LIKE-->
+                <!--SLDS-M-TOP/BOTTOM_MEDIUM ===> MARGIN CUSTOM-->
+                <div class="slds-button-group" role="group"> <!--FORMAT AS BUTTON GROUP-->
+                    <apex:outputLink value="{!URLFOR($Action.Student__c.New)}" styleClass="slds-button slds-button_neutral">
+                        New
+                    </apex:outputLink>
+                    <button class="slds-button slds-button_neutral" onClick="redirectToImportWizard()">Import</button>
+                    <button class="slds-button slds-button_neutral" ng-click="onChangeStatusClick()">Change Status</button>
+                </div>
+            </div>'
+            <!--STUDENT LIST TABLE-->
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate">
+                                &nbsp;
+                            </div>
+                        </th>
+                        <!--NAME-->
+                        <th scope="col">
+                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Name.Label}">
+                                    {!$ObjectType.Student__c.fields.Name.Label}
+                            </div>
+                        </th>
+                        <!--FIRST NAME-->
+                        <th scope="col">
+                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.First_Name__c.Label}">
+                                    {!$ObjectType.Student__c.fields.First_Name__c.Label}
+                            </div>
+                        </th>
+                        <!--LAST NAME-->
+                        <th scope="col">
+                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
+                                    {!$ObjectType.Student__c.fields.Last_Name__c.Label}
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="student in students track by $index">
+                        <th scope="col" data-label="Index">
+                                {{$index}}
+                        </th>
+                        <!--NAME-->
+                        <td scope="col" data-label="{!$ObjectType.Student__c.fields.Name.Label}">
+                            <div class="slds-truncate" ng-attr-title="{{student.Name}}">
+                                <!--<apex:commandLink action="{!URLFOR($Action.Student__c.View, c.Id)}" value="{!c.Name}"/>-->
+                                <span>{{student.Name}}</span>
+                            </div>
+                        </td>
+                        <!--FIRST NAME-->
+                        <td data-label="{!$ObjectType.Student__c.fields.First_Name__c.Label}">
+                            <div class="slds-truncate" ng-attr-title="{{student.First_Name__c}}">
+                                {{student.First_Name__c}}
+                            </div>
+                        </td>
+
+                        <!--LAST NAME-->
+                        <td data-label="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
+                            <div class="slds-truncate" ng-attr-title="{{student.Last_Name__c}}">
+                                {{student.Last_Name__c}}
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            <!--PAGINATION PART-->
+            <div class="slds-grid slds-m-top_small slds-m-bottom_small">
+                <!--CURRENT PAGE INFO-->
+                <div class="slds-col">
+                    Page:
+                    <!--<apex:outputText value="{!PageNumber} of {!CEILING(ResultSize/ PageSize)}"/>-->
+                </div>
+                <!--ACTION TO MOVE BACKWARD/FORWARD-->
+                <div class="slds-col slds-align_absolute-center">
+                    <!--PREVIOUS BUTTON START-->
+                    <!--SHOW IF CURRENT PAGE IS NOT THE FIRST PAGE-->
+                    <a href="#">Previous page</a>
+                    <span style="color: #ccc">Previous page</span>
+                    &nbsp;&nbsp;
+                    <a href="#">Next Page</a>
+                    <span style="color: #ccc">Next page</span>
+                    <!--<apex:commandLink action="{!Previous}"-->
+                                      <!--rendered="{!HasPrevious}"-->
+                                      <!--reRender="candidate_list_table"-->
+                                      <!--value="Previous page"/>-->
+                    <!--&lt;!&ndash;SHOW IF CURRENT PAGE IS THE FIRST PAGE&ndash;&gt;-->
+                    <!--<apex:outputText style="color: #ccc" value="Previous page" rendered="{!NOT(HasPrevious)}"/>-->
+                    <!--PREVIOUS BUTTON END-->
+                    &nbsp;&nbsp;
+                    <!--NEXT BUTTON START-->
+                    <!--SHOW IF CURRENT PAGE IS NOT THE LAST PAGE-->
+                    <!--<apex:commandLink action="{!Next}"-->
+                                      <!--rendered="{!HasNext}"-->
+                                      <!--reRender="candidate_list_table"-->
+                                      <!--value="Next page"-->
+                    <!--/>-->
+                    <!--&lt;!&ndash;SHOW IF CURRENT PAGE IS THE LAST PAGE&ndash;&gt;-->
+                    <!--<apex:outputText style="color: #ccc" value="Next page" rendered="{!NOT(HasNext)}"/>-->
+                    <!--NEXT BUTTON END-->
+                </div>
+                <!--CHANGE NUMBER OF RECORDS DISPLAY-->
+                <div class="slds-col">
+                    <select>
+                        <option>5</option>
+                        <option>10</option>
+                    </select>
+                    <!--<apex:selectList value="{!PageSize}" size="1" styleClass="slds-float_right">-->
+                        <!--<apex:selectOption itemValue="5" itemLabel="5"/>-->
+                        <!--<apex:selectOption itemValue="10" itemLabel="10"/>-->
+                        <!--<apex:actionSupport event="onchange" reRender="candidate_list_table"/>-->
+                    <!--</apex:selectList>-->
+                    <span class="slds-float_right">Records per page:</span>
+                </div>
+            </div>
+            <!--MODAL POP UP-->
+            <div class="demo-only" style="height: 640px;" ng-class="{'slds-hide': !isModalOpen}">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" ng-click="onCloseModalClick()">
+                                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}" />
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Change Status</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <span><b>3 Students Selected</b></span>
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" >
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    Change Status
+                                </label>
+                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right slds-picklist__input">
+                                    <input type="search"
+                                           id="{!$ObjectType.Candidate__c.fields.Country__c.Name}"
+                                           class="slds-lookup__search-input slds-input"
+                                           placeholder="Select an Option"
+                                           aria-owns="option-list-01" role="combobox"
+                                           aria-activedescendant="" aria-expanded="false" readonly="true"/>
+
+                                    <button class="slds-button slds-input__icon slds-text-color--default"
+                                            aria-expanded="false" tabindex="-1" title="settings">
+                                        <svg class="slds-button__icon slds-button__icon" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#down")}"></use>
+                                        </svg>
+
+                                        <span class="slds-assistive-text">Expand countries options</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="slds-dropdown slds-dropdown--left" role="listbox">
+                                <ul id="country-list-input" class="slds-dropdown__list slds-dropdown--length-5 slds-is-open" role="presentation">
+                                    <!--NG REPEAT HERE-->
+                                    <li role="presentation" ng-repeat="status in statusPickList track by $index">
+                                        <span class="slds-lookup__item-action slds-lookup__item-action--label"
+                                              role="option"
+                                              tabindex="0"
+                                              ng-attr-id="country-option-{{$index}}">
+                                            <svg class="slds-icon slds-icon--selected slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#check")}"></use>
+                                            </svg>
+                                            <span class="slds-truncate">{{status.label}}</span>
+                                        </span>
+                                    </li>
+                                    <!--// NG REPEAT HERE-->
+                                    <!--<apex:variable var="i" value="{!0}"/>-->
+                                    <!--ITERATE THROUGH COUNTRYPICKLIST-->
+                                    <!--<apex:repeat value="{!CountryPickList}" var="country">-->
+                                        <!--<apex:variable value="{!i + 1 }" var="i"/>-->
+                                        <!--<li role="presentation">-->
+                                                        <!--<span class="slds-lookup__item-action slds-lookup__item-action&#45;&#45;label"-->
+                                                              <!--role="option"-->
+                                                              <!--tabindex="0"-->
+                                                              <!--id="country-option-{!i}">-->
+                                                            <!--<svg class="slds-icon slds-icon&#45;&#45;selected slds-icon&#45;&#45;x-small slds-icon-text-default slds-m-right&#45;&#45;x-small slds-shrink-none" aria-hidden="true">-->
+                                                                <!--<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#check")}"></use>-->
+                                                            <!--</svg>-->
+                                                            <!--<span class="slds-truncate">{!Country.label}</span>-->
+                                                        <!--</span>-->
+                                        <!--</li>-->
+                                    <!--</apex:repeat>-->
+
+                                </ul>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" ng-click="onCloseModalClick()">Cancel</button>
+                            <button class="slds-button slds-button_brand"  ng-click="onSaveModalClick()">Save</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </div>
+        <script>
+        function getAllStudentByPage(callBack, pageSize, pageNum) {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.SM_StudentCC.queryStudentPagination}',
+                    pageSize, pageNum, callBack, {'escape': false}
+            );
+        }
+
+
+        function redirectToImportWizard() {
+            window.location.href = 'https://mulodo-recruitment-dev-ed.lightning.force.com/one/one.app?source=aloha#eyJjb21wb25lbnREZWYiOiJvbmU6YWxvaGFQYWdlIiwiYXR0cmlidXRlcyI6eyJ2YWx1ZXMiOnsiYWRkcmVzcyI6Ii91aS9zZXR1cC9kYXRhaW1wb3J0ZXIvRGF0YUltcG9ydGVyQWRtaW5MYW5kaW5nUGFnZT9yZXRVUkw9JTJGc2V0dXAlMkZob21lJnZmUmV0VVJMSW5TRlg9aHR0cHMlM0ElMkYlMkZtdWxvZG8tcmVjcnVpdG1lbnQtZGV2LWVkLmxpZ2h0bmluZy5mb3JjZS5jb20lMkZvbmUlMkZvbmUuYXBwJTNGc291cmNlJTNEYWxvaGElMjMlMkZzZXR1cCUyRnBhZ2UlM0Zub2RlSWQlM0RMYWJlbFdvcmtiZW5jaFNldHVwJTI2YWRkcmVzcyUzRCUyNTJGaTE4biUyNTJGVHJhbnNsYXRpb25TcGxhc2guYXBleHAlMjUzRnJldFVSTCUyNTNEJTI1MjUyRnNldHVwJTI1MjUyRmhvbWUlMjZhJTNBdCUzRDE1MDc4NzY3MjIxODciLCJoYXNIaXN0b3J5Ijp0cnVlfX0sImE6dCI6MTUwNzg3NjcyMzQ3MX0%3D'; // link to import page
+        }
+
+        angular.module('mainApp', [])
+                .factory('VFRemotingFactory', ($q, $rootScope) => {
+                    const factory = {};
+                    factory.getData = (pageSize, pageNum) => {
+                        let deferred = $q.defer();
+                        getAllStudentByPage((res) => {
+                            $rootScope.$apply(() => {
+                                deferred.resolve(res)
+                            })
+                        }, pageSize, pageNum);
+                        return deferred.promise;
+                    };
+                    return factory;
+                })
+                .controller('listStudentController', ($scope, VFRemotingFactory) => {
+                    $scope.pageSize = 5;
+                    $scope.currentPage = 0;
+                    $scope.statusPickList = {!statusPickList}; // Initial value of Status Pick List
+                    $scope.isModalOpen = false; // UI Control of modal pop up
+                    // init - constructor
+                    VFRemotingFactory.getData($scope.pageSize, $scope.currentPage).then(res => {
+                        $scope.students = res;
+                    });
+
+                    // event declaration
+                    $scope.onChangeStatusClick = () => {
+                        $scope.isModalOpen = true;
+                    };
+                    // close modal click (include cancel button) too
+                    $scope.onCloseModalClick = () => {
+                        $scope.isModalOpen = false;
+                    };
+
+                    // save click
+                    $scope.onSaveModalClick = () => {
+                        $scope.isModalOpen = false;
+                    }
+
+                });
+    </script>
+
+    </body>
+    </html>
+</apex:page>

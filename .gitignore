@@ -18,3 +18,8 @@ src/classes/TestLightningConnectQuickstart.cls-meta.xml
 src/pages/LightningConnectQuickstart.page
 src/pages/LightningConnectQuickstart.page-meta.xml
 src/staticresources/MRCandidateFormRemotingJS.resource-meta.xml
+#Ignore experiment
+src/pages/DemoUploadFilePage*
+src/pages/DisplayUploadFile*
+src/classes/ContentController*
+src/pages/EX*
