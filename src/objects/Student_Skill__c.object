@@ -53,10 +53,19 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>Points__c</fullName>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
         <externalId>false</externalId>
-        <label>Points</label>
-        <precision>4</precision>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Max_Point__c</fullName>
+        <externalId>false</externalId>
+        <label>Max Point</label>
+        <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
         <trackHistory>false</trackHistory>
@@ -65,67 +74,32 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Student_ID__c</fullName>
+        <fullName>Skill__c</fullName>
         <externalId>false</externalId>
-        <label>Student ID</label>
-        <referenceTo>Student__c</referenceTo>
-        <relationshipLabel>Student Scoring Skills</relationshipLabel>
-        <relationshipName>Student_Scoring_Skills</relationshipName>
-        <relationshipOrder>0</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <label>Skill</label>
+        <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>Skill_List</valueSetName>
+        </valueSet>
     </fields>
-    <fields>
-        <fullName>Student_Skill__c</fullName>
-        <description>Student Skill ID must have when create Student Scoring Skill</description>
-        <externalId>false</externalId>
-        <label>Student Skill</label>
-        <referenceTo>Student_Skill__c</referenceTo>
-        <relationshipLabel>Student Scoring Skills</relationshipLabel>
-        <relationshipName>Student_Scoring_Skills</relationshipName>
-        <relationshipOrder>1</relationshipOrder>
-        <reparentableMasterDetail>false</reparentableMasterDetail>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>MasterDetail</type>
-        <writeRequiresMasterRead>false</writeRequiresMasterRead>
-    </fields>
-    <label>Student Scoring Skill</label>
+    <label>Student Skill</label>
     <listViews>
         <fullName>All</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
     <nameField>
-        <displayFormat>SCK-{0000}</displayFormat>
-        <label>Student Scoring Skill Name</label>
+        <displayFormat>SK-{0000}</displayFormat>
+        <label>Student Skill Name</label>
         <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Student Scoring Skills</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <recordTypes>
-        <fullName>Java</fullName>
-        <active>true</active>
-        <description>Record Type for Java</description>
-        <label>Java</label>
-    </recordTypes>
-    <recordTypes>
-        <fullName>PHP</fullName>
-        <active>true</active>
-        <description>Record type for PHP Scoring</description>
-        <label>PHP</label>
-    </recordTypes>
-    <recordTypes>
-        <fullName>Salesforce</fullName>
-        <active>true</active>
-        <description>Record type for Salesforce</description>
-        <label>Salesforce</label>
-    </recordTypes>
+    <pluralLabel>Student Skills</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ControlledByParent</sharingModel>
+    <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

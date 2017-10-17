@@ -267,6 +267,13 @@
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
+    <listViews>
+        <fullName>Custom_Student_View</fullName>
+        <columns>NAME</columns>
+        <columns>Status__c</columns>
+        <filterScope>Mine</filterScope>
+        <label>Custom Student View</label>
+    </listViews>
     <nameField>
         <displayFormat>A-{0000}</displayFormat>
         <label>Student Name</label>
@@ -280,17 +287,20 @@
         <fullName>Birthday_Minimum</fullName>
         <active>true</active>
         <description>Candidates age should be greater than 16</description>
-        <errorConditionFormula>NOT(AND(  
-      ISBLANK(Birthday__c),
+        <errorConditionFormula>AND(  
+      NOT(ISBLANK(Birthday__c)),
       ((YEAR(TODAY()) - YEAR(Birthday__c)) &lt; 16)
-))</errorConditionFormula>
+)</errorConditionFormula>
         <errorMessage>Candidates age should be greater than 16</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>Digit_Check</fullName>
         <active>true</active>
         <description>Phone should contains only digit and whitespace</description>
-        <errorConditionFormula>NOT(REGEX( Phone__c , &quot;^[0-9 ]+$&quot;))</errorConditionFormula>
+        <errorConditionFormula>AND(
+    NOT(ISBLANK(Phone__c)),
+    NOT(REGEX( Phone__c , &quot;^[0-9 ]+$&quot;))
+)</errorConditionFormula>
         <errorMessage>Phone should contains only digit and whitespace</errorMessage>
     </validationRules>
     <validationRules>
@@ -309,7 +319,13 @@ NOT(OR(REGEX( Email__c ,&quot;\\w([^@\\s,;]+)@(mulodo\\.com)&quot;),
         <fullName>Phone_Length_Validate</fullName>
         <active>true</active>
         <description>Phone Length should be between 10 and 11 number</description>
-        <errorConditionFormula>LEN(SUBSTITUTE(Phone__c,&quot; &quot;,&quot;&quot;)) &lt;10 || LEN(SUBSTITUTE(Phone__c, &quot; &quot;,&quot;&quot;)) &gt; 11</errorConditionFormula>
+        <errorConditionFormula>AND(
+   NOT(ISBLANK(Phone__c)),
+   OR(
+      LEN(SUBSTITUTE(Phone__c,&quot; &quot;,&quot;&quot;)) &lt;10,
+      LEN(SUBSTITUTE(Phone__c, &quot; &quot;,&quot;&quot;)) &gt; 11
+   )
+)</errorConditionFormula>
         <errorMessage>Phone Length should be between 10 and 11 number</errorMessage>
     </validationRules>
     <visibility>Public</visibility>

@@ -42,40 +42,69 @@
                 </div>
             </div>'
             <!--STUDENT LIST TABLE-->
-            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <table class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout">
                     <thead>
-                    <tr class="slds-text-title_caps">
-                        <th scope="col">
-                            <div class="slds-truncate">
-                                &nbsp;
-                            </div>
-                        </th>
-                        <!--NAME-->
-                        <th scope="col">
-                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Name.Label}">
-                                    {!$ObjectType.Student__c.fields.Name.Label}
-                            </div>
-                        </th>
-                        <!--FIRST NAME-->
-                        <th scope="col">
-                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.First_Name__c.Label}">
-                                    {!$ObjectType.Student__c.fields.First_Name__c.Label}
-                            </div>
-                        </th>
-                        <!--LAST NAME-->
-                        <th scope="col">
-                            <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
-                                    {!$ObjectType.Student__c.fields.Last_Name__c.Label}
-                            </div>
-                        </th>
-                    </tr>
+                        <tr class="slds-text-title_caps slds-line-height_reset">
+                        <!--CHECK BOX-->
+                            <th class="slds-text-align_right" scope="col" style="width: 3.25rem;">
+                                <div class="slds-th__action slds-th__action_form">
+                                  <span class="slds-checkbox">
+                                    <input type="checkbox" name="options" id="checkbox-353" tabindex="0" value="on" checked="" />
+                                    <label class="slds-checkbox__label" for="checkbox-353">
+                                      <span class="slds-checkbox_faux"></span>
+                                      <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                    </label>
+                                  </span>
+                                </div>
+                            </th>
+                            <!--<th scope="col">-->
+                                <!--<div class="slds-truncate">-->
+                                    <!--&nbsp;-->
+                                <!--</div>-->
+                            <!--</th>-->
+                            <!--NAME-->
+                            <th scope="col">
+                                <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Name.Label}">
+                                        {!$ObjectType.Student__c.fields.Name.Label}
+                                </div>
+                            </th>
+                            <!--FIRST NAME-->
+                            <th scope="col">
+                                <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.First_Name__c.Label}">
+                                        {!$ObjectType.Student__c.fields.First_Name__c.Label}
+                                </div>
+                            </th>
+                            <!--LAST NAME-->
+                            <th scope="col">
+                                <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
+                                        {!$ObjectType.Student__c.fields.Last_Name__c.Label}
+                                </div>
+                            </th>
+                            <!--STATUS-->
+                            <th scope="col">
+                                <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Status__c.Label}">
+                                        {!$ObjectType.Student__c.fields.Status__c.Label}
+                                </div>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="student in students track by $index" ng-click="onSelectStudent(student.Id)"
-                        ng-class="{'slsd-is-selected': selectedList.has(student.Id)}">
-                        <th scope="col" data-label="Index">
-                                {{$index}}
-                        </th>
+                    <tr ng-repeat="student in students track by $index"
+                        class="slds-hint-parent"
+                        ng-class="{'slds-is-selected': selectedList.has(student.Id)}">
+                        <!--CHECKBOX-->
+                        <td class="slds-text-align_right" role="gridcell">
+                            <span class="slds-checkbox">
+                              <input type="checkbox" name="options" ng-attr-id="{{'checkbox-' + $index}}"  ng-attr-checked="{{selectedList.has(student.Id)}}" ng-click="onSelectStudent(student.Id)"/>
+                              <label class="slds-checkbox__label" ng-attr-for="{{'checkbox-'+ $index}}">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select item 1</span>
+                              </label>
+                            </span>
+                        </td>
+                        <!--<th scope="col" data-label="Index">-->
+                                <!--{{$index}}-->
+                        <!--</th>-->
                         <!--NAME-->
                         <td scope="col" data-label="{!$ObjectType.Student__c.fields.Name.Label}">
                             <div class="slds-truncate" ng-attr-title="{{student.Name}}">
@@ -96,6 +125,13 @@
                                 {{student.Last_Name__c}}
                             </div>
                         </td>
+
+                        <!--STATUS-->
+                        <td data-label="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
+                            <div class="slds-truncate" ng-attr-title="{{student.Status__c}}">
+                                {{student.Status__c}}
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -103,43 +139,46 @@
             <div class="slds-grid slds-m-top_small slds-m-bottom_small">
                 <!--CURRENT PAGE INFO-->
                 <div class="slds-col">
-                    Page:
+                    Page: {{currentPage}}
                     <!--<apex:outputText value="{!PageNumber} of {!CEILING(ResultSize/ PageSize)}"/>-->
                 </div>
                 <!--ACTION TO MOVE BACKWARD/FORWARD-->
                 <div class="slds-col slds-align_absolute-center">
                     <!--PREVIOUS BUTTON START-->
                     <!--SHOW IF CURRENT PAGE IS NOT THE FIRST PAGE-->
-                    <a href="#">Previous page</a>
-                    <span style="color: #ccc">Previous page</span>
+                    <a href="#" ng-class="{'slds-hide': currentPage === 0}"
+                       ng-click="onChangePageNumber(currentPage - 1)"
+                    >
+                        Previous page</a>
+                    <span class="slds-hide" style="color: #ccc" ng-class="{'slds-show': currentPage === 0}">Previous page</span>
                     &nbsp;&nbsp;
-                    <a href="#">Next Page</a>
-                    <span style="color: #ccc">Next page</span>
-                    <!--<apex:commandLink action="{!Previous}"-->
-                                      <!--rendered="{!HasPrevious}"-->
-                                      <!--reRender="candidate_list_table"-->
-                                      <!--value="Previous page"/>-->
+                    <a href="#" ng-class="{'slds-hide': currentPage === lastPage}"
+                       ng-click="onChangePageNumber(currentPage + 1)"
+                    >Next Page</a>
+                    <span style="color: #ccc" class="slds-hide" ng-class="{'slds-show': currentPage === lastPage}">Next page</span>
                     <!--&lt;!&ndash;SHOW IF CURRENT PAGE IS THE FIRST PAGE&ndash;&gt;-->
-                    <!--<apex:outputText style="color: #ccc" value="Previous page" rendered="{!NOT(HasPrevious)}"/>-->
                     <!--PREVIOUS BUTTON END-->
                     &nbsp;&nbsp;
                     <!--NEXT BUTTON START-->
                     <!--SHOW IF CURRENT PAGE IS NOT THE LAST PAGE-->
-                    <!--<apex:commandLink action="{!Next}"-->
-                                      <!--rendered="{!HasNext}"-->
-                                      <!--reRender="candidate_list_table"-->
-                                      <!--value="Next page"-->
-                    <!--/>-->
-                    <!--&lt;!&ndash;SHOW IF CURRENT PAGE IS THE LAST PAGE&ndash;&gt;-->
-                    <!--<apex:outputText style="color: #ccc" value="Next page" rendered="{!NOT(HasNext)}"/>-->
                     <!--NEXT BUTTON END-->
                 </div>
                 <!--CHANGE NUMBER OF RECORDS DISPLAY-->
                 <div class="slds-col">
-                    <select>
-                        <option>5</option>
-                        <option>10</option>
-                    </select>
+                    <select class="slds-float_right"
+                            ng-model="pageSize"
+                            ng-change="onPageSizeChange()"
+                            ng-options="pageOp as pageOp for pageOp in pageSizeOption"></select>
+                    <!--<select class="slds-float_right" ng-model="pageSize" name="pageOptionSelect" id="pageOptionSelect">-->
+                        <!--&lt;!&ndash;LOOP OPTION HERE&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;<option ng-repeat="pageOp in pageSizeOption"&ndash;&gt;-->
+                                <!--&lt;!&ndash;value="{{pageOp}}"&ndash;&gt;-->
+                        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;{{pageOp}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</option>&ndash;&gt;-->
+                        <!--<option ng-repeat="pageOp in pageSizeOption" value="{{pageOp}}">{{pageOp}}</option>-->
+                    <!--</select>-->
                     <!--<apex:selectList value="{!PageSize}" size="1" styleClass="slds-float_right">-->
                         <!--<apex:selectOption itemValue="5" itemLabel="5"/>-->
                         <!--<apex:selectOption itemValue="10" itemLabel="10"/>-->
@@ -162,64 +201,58 @@
                             <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Change Status</h2>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                            <span><b>3 Students Selected</b></span>
+                            <span><b>{{selectedList.size}} Students Selected</b></span>
+                            <!--STATUS PICK LIST FORM ELEMENT-->
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label" >
                                     <abbr class="slds-required" title="required">*</abbr>
                                     Change Status
                                 </label>
-                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right slds-picklist__input">
-                                    <input type="search"
-                                           id="{!$ObjectType.Candidate__c.fields.Country__c.Name}"
-                                           class="slds-lookup__search-input slds-input"
-                                           placeholder="Select an Option"
-                                           aria-owns="option-list-01" role="combobox"
-                                           aria-activedescendant="" aria-expanded="false" readonly="true"/>
 
-                                    <button class="slds-button slds-input__icon slds-text-color--default"
-                                            aria-expanded="false" tabindex="-1" title="settings">
-                                        <svg class="slds-button__icon slds-button__icon" aria-hidden="true">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#down")}"></use>
-                                        </svg>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container slds-size_small">
+                                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-combobox-picklist"
+                                             ng-class="{'slds-is-open': isDropdownOpen}"
+                                             aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                                <!--CLICK TO TOGGLE DROPDOWN / PICK LIST -->
+                                                <input type="text"
+                                                       class="slds-input slds-combobox__input" id="combobox-unique-id"
+                                                       ng-click="onToggleStatusPickList()"
+                                                       aria-controls="listbox-unique-id" autocomplete="off" role="textbox" placeholder="Select an Option" readonly="true"
+                                                       ng-attr-value="{{selectedStatusOption ? selectedStatusOption : 'Choose Status in the list'}}" />
+                                                <!--ICON WHEN CLICK-->
+                                                <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right"
+                                                      title="Description of icon when needed">
+                                                    <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#down')}" />
+                                                    </svg>
+                                                    <span class="slds-assistive-text">Description of icon</span>
+                                                </span>
+                                            </div>
 
-                                        <span class="slds-assistive-text">Expand countries options</span>
-                                    </button>
+                                            <div id="listbox-unique-id" role="listbox">
+
+                                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation">
+                                                    <!--OPTION REPEAT HERE-->
+                                                    <li role="presentation" class="slds-listbox__item" ng-repeat="status in statusPickList track by $index" ng-click="onSelectStatusOption(status.value)">
+                                                        <span ng-attr-id="{{'listbox-option-unique-id-' + $index}}"
+                                                              class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-media_center" role="option">
+                                                            <span class="slds-media__figure">
+                                                                <svg class="slds-icon slds-icon_x-small slds-listbox__icon-selected" aria-hidden="true">
+                                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#check')}" />
+                                                                </svg>
+                                                            </span>
+                                                            <span class="slds-media__body">
+                                                                <span class="slds-truncate" ng-attr-title="{{status.label}}"> {{status.label}}</span>
+                                                            </span>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="slds-dropdown slds-dropdown--left" role="listbox">
-                                <ul id="country-list-input" class="slds-dropdown__list slds-dropdown--length-5 slds-is-open" role="presentation">
-                                    <!--NG REPEAT HERE-->
-                                    <li role="presentation" ng-repeat="status in statusPickList track by $index">
-                                        <span class="slds-lookup__item-action slds-lookup__item-action--label"
-                                              role="option"
-                                              tabindex="0"
-                                              ng-attr-id="country-option-{{$index}}">
-                                            <svg class="slds-icon slds-icon--selected slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none" aria-hidden="true">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#check")}"></use>
-                                            </svg>
-                                            <span class="slds-truncate">{{status.label}}</span>
-                                        </span>
-                                    </li>
-                                    <!--// NG REPEAT HERE-->
-                                    <!--<apex:variable var="i" value="{!0}"/>-->
-                                    <!--ITERATE THROUGH COUNTRYPICKLIST-->
-                                    <!--<apex:repeat value="{!CountryPickList}" var="country">-->
-                                        <!--<apex:variable value="{!i + 1 }" var="i"/>-->
-                                        <!--<li role="presentation">-->
-                                                        <!--<span class="slds-lookup__item-action slds-lookup__item-action&#45;&#45;label"-->
-                                                              <!--role="option"-->
-                                                              <!--tabindex="0"-->
-                                                              <!--id="country-option-{!i}">-->
-                                                            <!--<svg class="slds-icon slds-icon&#45;&#45;selected slds-icon&#45;&#45;x-small slds-icon-text-default slds-m-right&#45;&#45;x-small slds-shrink-none" aria-hidden="true">-->
-                                                                <!--<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, "/assets/icons/utility-sprite/svg/symbols.svg#check")}"></use>-->
-                                                            <!--</svg>-->
-                                                            <!--<span class="slds-truncate">{!Country.label}</span>-->
-                                                        <!--</span>-->
-                                        <!--</li>-->
-                                    <!--</apex:repeat>-->
-
-                                </ul>
                             </div>
                         </div>
                         <footer class="slds-modal__footer">
@@ -242,7 +275,7 @@
         function changeSelectedStatus(callback, studentList, selectedStatus) {
             Visualforce.remoting.Manager.invokeAction(
                 '{!$RemoteAction.SM_StudentCC.changeSelectedStatus}',
-                    ``, selectedStatus, callback, {'escape': false}
+                    studentList, selectedStatus, callback, {'escape': false}
             );
         }
 
@@ -264,39 +297,51 @@
                         return deferred.promise;
                     };
                     factory.changeSelectedStatus = (studentIdList, selectedStatus) => {
+                        console.log('Selected Id List: ', studentIdList);
+                        console.log('Target Status: ', selectedStatus);
                         let deferred = $q.defer();
                         changeSelectedStatus((res) => {
-                            console.log('res: ', res); // method from controller return void
+                            console.log('res in factory : ', res); // method from controller return void
                             /** @TODO: We will add feature to notification later */
                         }, studentIdList, selectedStatus);
                         return deferred.promise;
                     };
                     return factory;
                 })
-                .service('selectedStudentService', function (){
-                    var selectedStudent = [];
-                    return {
-                        getSelectedStudents: () => selectedStudent,
-                        setSelectedStudents: (list) => {selectedStudent = list}
-                    }
-                })
-                .controller('listStudentController', ['$scope', 'VFRemotingFactory', 'selectedStudentService', ($scope, VFRemotingFactory, selectedStudentService) => {
-//                    console.log('Demo Service: ', demoService.getSelectedStudents());
+                .controller('listStudentController', ['$scope', 'VFRemotingFactory', ($scope, VFRemotingFactory) => {
                     // declaration
-                    $scope.pageSize = 5;
-                    $scope.currentPage = 0;
+                    $scope.pageSize = 5; // default page size
+                    $scope.currentPage = 0; // default current page
+                    $scope.pageSizeOption = [5, 10 , 20]; // pageSizeOption Setup here
                     $scope.isModalOpen = false; // UI Control of modal pop up
                     $scope.selectedList = new Set(); // UI Control of Selected List
-                    VFRemotingFactory.getData($scope.pageSize, $scope.currentPage).then(res => {
-                        $scope.students = res;
-                    });
+                    $scope.isDropdownOpen = false; // UI Control pick list open status
+                    $scope.statusPickList = {!statusPickList}; // Status Pick List
+                    $scope.selectedStatusOption = null; // value of selected status
+                    $scope.totalRecord = {!totalRecord}; // number of total records
+                    $scope.lastPage =  Math.floor($scope.totalRecord / $scope.pageSize); // calculate the lastPage number
+                    console.log('Last Page: ', $scope.lastPage);
+//                    console.log('$scope: ', $scope.statusPickList);
+
+                    $scope.initData = () => {
+                        VFRemotingFactory.getData($scope.pageSize, $scope.currentPage).then(res => {
+                            $scope.students = [...res];
+                        });
+                    };
+
+                    $scope.initData(); // init data call at init controller
 //                    $scope.students = StudentService.getStudentList();
                     // init - constructor
 
                     // event declaration
                     $scope.onChangeStatusClick = () => {
+                        if ($scope.selectedList.size === 0) {
+                            alert('You should selected at least 1 student to change status');
+                            return;
+                        }
                         $scope.isModalOpen = true;
                     };
+
                     // close modal click (include cancel button) too
                     $scope.onCloseModalClick = () => {
                         $scope.isModalOpen = false;
@@ -304,33 +349,47 @@
 
                     // save click
                     $scope.onSaveModalClick = () => {
-                        $scope.isModalOpen = false;
+                        VFRemotingFactory.changeSelectedStatus(
+                            JSON.stringify([...$scope.selectedList]),
+                                $scope.selectedStatusOption
+                        );
+                        $scope.initData();
+                        $scope.selectedList = new Set(); // reset selected list
+                        $scope.isModalOpen = false; // close modal after complete
                     };
 
+                    // toggle status pick list
+                    $scope.onToggleStatusPickList = () => {
+                        $scope.isDropdownOpen = !$scope.isDropdownOpen;
+                    };
+
+                    // on select pick list status option
+                    $scope.onSelectStatusOption = (option) => {
+                        $scope.selectedStatusOption = option;
+                        $scope.isDropdownOpen = false;
+                    };
+
+                    // on select student on list event
                     $scope.onSelectStudent = (id) => {
-                        console.log('Id: ', id);
                         if (!$scope.selectedList.has(id)) {
                             $scope.selectedList.add(id);
-                            console.log('Add');
                         } else {
                             $scope.selectedList.delete(id);
-                            console.log('Remove');
                         }
-                    }
+                    };
 
+                    $scope.onPageSizeChange = () => {
+                        $scope.lastPage = Math.floor($scope.totalRecord / $scope.pageSize); // recalculate the last page when $scope.pageSize change
+                        console.log('$scope Last page: ', $scope.lastPage);
+                        $scope.initData(); // whenever change pageSize or number of Page ==> request list again
+                    };
+
+                    $scope.onChangePageNumber = (pageNumber) => {
+                        $scope.currentPage = pageNumber;
+                        $scope.initData();
+                    };
 
                 }])
-                .controller('modalController', [
-                    '$scope', 'selectedStudentService',($scope, selectedStudentService) => {
-                        $scope.isPickListOpen = false; // UI Control of pickList inside Modal pop up
-                        $scope.statusPickList = {!statusPickList}; // Initial value of Status Pick List
-                        console.log(demoService.getSelectedStudents());
-
-                        $scope.onSubmitChangeStatus = () => {
-
-                        }
-                    }
-                ])
     </script>
 
     </body>
