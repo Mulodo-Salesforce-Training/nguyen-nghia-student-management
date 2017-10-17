@@ -26,12 +26,7 @@ global with sharing class SM_StudentCC {
 		for(Student__c student: updateStudent) {
 			student.Status__c = status;
 		}
-		List<Database.SaveResult> res = Database.update(updateStudent); // update after complete
-		for (Database.SaveResult each: res) {
-			if (each.getErrors().size() > 0 ) {
-				return false;
-			}
-		}
+		Database.update(updateStudent); // update after complete
 		return true; // everything ok
 	}
 }

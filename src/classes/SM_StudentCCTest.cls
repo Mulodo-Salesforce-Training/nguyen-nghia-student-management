@@ -59,7 +59,7 @@ private class SM_StudentCCTest {
 		}
 
 		Test.startTest();
-			SM_StudentCC.changeSelectedStatus(targetIdList, 'Working');
+			SM_StudentCC.changeSelectedStatus(JSON.serialize(targetIdList), 'Working');
 		Test.stopTest();
 
 		Student__c updateStudent = [SELECT Status__c FROM Student__c WHERE Id =: targetIdList[0]];
