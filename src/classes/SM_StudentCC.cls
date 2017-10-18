@@ -32,9 +32,25 @@ global with sharing class SM_StudentCC {
 
 	// method to execute batch in VF Page
 	global static void studentLevelBatchExecute() {
-		/** @TODO: Need to check whether Queable Job is queue or not ===> If already queued, disable submit button and add message to page*/
-		System.enqueueJob(new SM_StudentSkillsQueable());
-		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Student Level and Skill has just been executed'));
+		/** @TODO: Need to check whether batch Job is schedule or not ===> If already queued, disable submit button and add message to page*/
+		Integer existedScheduleCount = [SELECT COUNT() FROM CronTrigger WHERE CronExpression = 'Student Level and Skill Executed'];
+		if (existedScheduleCount > 0) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'This action has already been scheduled'));
+			return;
+		}
+		if (System.isBatch()) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'This action has already executed'));
+			return;
+		}
+		try {
+			System.scheduleBatch(new SM_StudentLevelBatch(), 'Student Level and Skill Executed',1);
+		} catch  (AsyncException e) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.FATAL, 'This action has already been scheduled. Detail Message: ' + e));
+			return;
+		}
+
+
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Student Level and Skill will be execute within 1 minute'));
 	}
 
 
