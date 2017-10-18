@@ -30,8 +30,12 @@ global with sharing class SM_StudentCC {
 		return true; // everything ok
 	}
 
+	// method to execute batch in VF Page
 	global static void studentLevelBatchExecute() {
-		SM_StudentLevelBatch levelBatch = new SM_StudentLevelBatch();
-		Database.executeBatch(levelBatch);
+		/** @TODO: Need to check whether Queable Job is queue or not ===> If already queued, disable submit button and add message to page*/
+		System.enqueueJob(new SM_StudentSkillsQueable());
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Student Level and Skill has just been executed'));
 	}
+
+
 }
