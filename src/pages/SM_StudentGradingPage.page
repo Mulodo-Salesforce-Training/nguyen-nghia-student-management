@@ -1,0 +1,27 @@
+<apex:page controller="SM_StudentCC">
+    <apex:pageBlock>
+            <apex:pageBlockButtons>
+                <apex:form>
+                    <apex:commandButton value="Score All Students" action="{!studentLevelBatchExecute}"/>
+                </apex:form>
+
+            </apex:pageBlockButtons>
+
+        <apex:pageBlockSection>
+            <h1>Instruction</h1>
+            <ol>
+                <li>1. Click Score All Students</li>
+                <ul>
+                    <li>All Students have status <span><b>"Working" are scored</b></span></li>
+                    <li>All students have status <b>"Disabled"</b> or <b>"Graduated"</b> are not scored</li>
+                </ul>
+                <li>2. Upon completition, you will receive 2 emails</li>
+                <ul>
+                    <li>Students confirmation email</li>
+                    <li>Campaign Members confirmation email</li>
+                </ul>
+            </ol>
+            <p>Note: Click the button only once to avoild receiving multiple emails. So after clicking this button, it will be disabled</p>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

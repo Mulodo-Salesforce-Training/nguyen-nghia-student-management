@@ -29,4 +29,9 @@ global with sharing class SM_StudentCC {
 		Database.update(updateStudent); // update after complete
 		return true; // everything ok
 	}
+
+	global static void studentLevelBatchExecute() {
+		SM_StudentLevelBatch levelBatch = new SM_StudentLevelBatch();
+		Database.executeBatch(levelBatch);
+	}
 }

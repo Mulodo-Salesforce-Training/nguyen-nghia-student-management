@@ -1,12 +1,10 @@
 /**
- * Created by nguyen.nghia@mulodo.com on 10/17/2017.
+ * Created by nguyen.nghia@mulodo.com on 10/18/2017.
  */
-public class SM_StudentLevelBatch implements Database.Batchable<sObject>{
-	public System.Iterable<sObject> start(Database.BatchableContext jobId) {
-		return [SELECT Scores__c, Level__c FROM Student__c];
-	}
+public class SM_StudentLevelQueable implements Queueable{
 
-	public Void execute(Database.BatchableContext jobId, List<sObject> recordList) {
+	public Void execute(System.QueueableContext context) {
+		List<Student__c> recordList = [SELECT Scores__c, Level__c FROM Student__c];
 		List<Student__c> updateList = new List<Student__c>();
 		for(Student__c student: (List<Student__c>)recordList) {
 			if (student.Scores__c >= 400) {
@@ -22,8 +20,4 @@ public class SM_StudentLevelBatch implements Database.Batchable<sObject>{
 		}
 		update updateList;
 	}
-
-	public Void finish(Database.BatchableContext jobId) {
-	}
-
 }
