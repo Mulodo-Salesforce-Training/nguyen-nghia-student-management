@@ -1,14 +1,14 @@
 <apex:page controller="SM_StudentCC">
-    <apex:pageBlock>
+    <apex:pageBlock >
 
-        <apex:pageMessages/>
-        <apex:pageBlockButtons>
-                <apex:form>
+        <apex:pageMessages />
+        <apex:pageBlockButtons >
+                <apex:form >
                     <apex:commandButton value="Score All Students" action="{!studentLevelBatchExecute}"/>
                 </apex:form>
         </apex:pageBlockButtons>
 
-        <apex:pageBlockSection>
+        <apex:pageBlockSection >
             <h1>Instruction</h1>
             <ol>
                 <li>1. Click Score All Students</li>

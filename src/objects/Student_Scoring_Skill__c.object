@@ -96,6 +96,10 @@
     <label>Student Scoring Skill</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Student_Skill__c</columns>
+        <columns>Student_ID__c</columns>
+        <columns>Points__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -125,7 +129,11 @@
         <description>Record type for Salesforce</description>
         <label>Salesforce</label>
     </recordTypes>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Student_ID__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Student_Skill__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Points__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

@@ -5,4 +5,7 @@
     <label>Mulodo Student Management</label>
     <tab>Student__c</tab>
     <tab>Student_Scoring_Skill__c</tab>
+    <tab>Student_List</tab>
+    <tab>Student_Skill__c</tab>
+    <tab>Advanced</tab>
 </CustomApplication>

@@ -18,16 +18,6 @@ private class SM_StudentLevelBatchTest {
 			skillRTMap.put(type.Name, type.Id);
 		}
 
-		System.debug(studentSkillOption);
-
-//		for(Schema.PicklistEntry skill: studentSkillOption) {
-//			skillList.add(new Student_Skill__c(
-//					Active__c = true,
-//					Skill__c = skill.getLabel(),
-//					Max_Point__c = 500
-//					RecordType = skillRTMap.get('Java')
-//			));
-//		}
 		skillList = new List<Student_Skill__c> {
 				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('Java'), Skill__c = 'Java Basic Knowledge', Max_Point__c = 100),
 				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('PHP'), Skill__c = 'OOP', Max_Point__c = 200),

@@ -64,7 +64,7 @@
     <fields>
         <fullName>Max_Point__c</fullName>
         <externalId>false</externalId>
-        <label>SPoint</label>
+        <label>Max Point</label>
         <precision>18</precision>
         <required>false</required>
         <scale>0</scale>
@@ -89,6 +89,9 @@
     <label>Student Skill</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Skill__c</columns>
+        <columns>Max_Point__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -99,7 +102,161 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Student Skills</pluralLabel>
-    <searchLayouts/>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Java</fullName>
+        <active>true</active>
+        <label>Java</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Caching</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Java Basic Knowledge</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>OOP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oracle DB</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Redis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>mySQL</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>PHP</fullName>
+        <active>true</active>
+        <label>PHP</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Caching</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Laravel framework</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>OOP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oracle DB</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PHP Basic Knowledge</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Redis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>mySQL</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Salesforce</fullName>
+        <active>true</active>
+        <label>Salesforce</label>
+        <picklistValues>
+            <picklist>Skill__c</picklist>
+            <values>
+                <fullName>Admin Beginner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Admin Intermediate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Automate Your Business Processes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Build Apps Fast with Salesforce Platform Services</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Developer Beginner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Get Started with Lightning Experience</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Get Started with Salesforce DX</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>JavaScript%2C HTML%2C and CSS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Learn CRM Essentials for Salesforce Classic</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make the Move to Lightning Experience</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Networking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Protect Your Salesforce Data</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rock Your Future with Salesforce</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Active__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Skill__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Active__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Max_Point__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Skill__c</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Skill__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Active__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Max_Point__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

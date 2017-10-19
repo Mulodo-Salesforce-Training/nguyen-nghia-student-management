@@ -53,6 +53,18 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
+        <fullName>AvatarID__c</fullName>
+        <description>Avatar( Image ID) that use to display avatar</description>
+        <externalId>false</externalId>
+        <label>AvatarID</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Birthday__c</fullName>
         <externalId>false</externalId>
         <label>Birthday</label>
@@ -73,9 +85,9 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Country_List__c</fullName>
+        <fullName>Country__c</fullName>
         <externalId>false</externalId>
-        <label>Country List</label>
+        <label>Country</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
@@ -153,6 +165,17 @@
         </valueSet>
     </fields>
     <fields>
+        <fullName>Map_Location__c</fullName>
+        <displayLocationInDecimal>true</displayLocationInDecimal>
+        <externalId>false</externalId>
+        <label>Map Location</label>
+        <required>false</required>
+        <scale>8</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Location</type>
+    </fields>
+    <fields>
         <fullName>Phone__c</fullName>
         <externalId>false</externalId>
         <label>Phone</label>
@@ -160,18 +183,6 @@
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Phone</type>
-    </fields>
-    <fields>
-        <fullName>Score__c</fullName>
-        <externalId>false</externalId>
-        <label>Score</label>
-        <precision>3</precision>
-        <required>false</required>
-        <scale>0</scale>
-        <trackHistory>false</trackHistory>
-        <trackTrending>false</trackTrending>
-        <type>Number</type>
-        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Scores__c</fullName>
@@ -251,6 +262,20 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Total_Scores__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(   OR(Text(Status__c)  = &apos;Disabled&apos;,Text(Status__c)  = &apos;Graduated&apos;) ,  0 ,  Scores__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Scores</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Zip_Postal_Code__c</fullName>
         <externalId>false</externalId>
         <label>Zip/Postal Code</label>
@@ -264,6 +289,11 @@
     <label>Student</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Skills__c</columns>
+        <columns>Total_Scores__c</columns>
+        <columns>Status__c</columns>
+        <columns>Level__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -281,7 +311,10 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Students</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Skills__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Total_Scores__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Birthday_Minimum</fullName>
