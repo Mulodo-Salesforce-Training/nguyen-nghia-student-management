@@ -16,9 +16,7 @@ public with sharing class SM_GMapAPIUtil {
 		req.setEndpoint(String.format(GEOCODING_URI_FORMAT, new List<String> {encodedAddress, GMAP_API_KEY}));
 		try {
 			HttpResponse res = http.send(req);
-			System.debug(res.getBody());
 			GResponse googleRes = (GResponse) JSON.deserialize(res.getBody(), SM_GMapAPIUtil.GResponse.class);
-			System.debug(googleRes);
 			if (googleRes.status == 'OK') {
 				geo = googleRes.results[0].geometry.location;
 			}
