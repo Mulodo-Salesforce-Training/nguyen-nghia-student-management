@@ -86,6 +86,11 @@
                                         {!$ObjectType.Student__c.fields.Status__c.Label}
                                 </div>
                             </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="View Map">
+                                    View Map
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,6 +135,13 @@
                         <td data-label="{!$ObjectType.Student__c.fields.Last_Name__c.Label}">
                             <div class="slds-truncate" ng-attr-title="{{student.Status__c}}">
                                 {{student.Status__c}}
+                            </div>
+                        </td>
+                        <!--VIEW MAP-->
+                        <td data-label="View Map">
+                            <div class="slds-truncate">
+                                <a ng-attr-href="{!URLFOR($Page.Ex_GoogleMap2)}?id={{student.Id}}">View Map</a>
+
                             </div>
                         </td>
                     </tr>
@@ -297,8 +309,6 @@
                         return deferred.promise;
                     };
                     factory.changeSelectedStatus = (studentIdList, selectedStatus) => {
-                        console.log('Selected Id List: ', studentIdList);
-                        console.log('Target Status: ', selectedStatus);
                         let deferred = $q.defer();
                         changeSelectedStatus((res) => {
                             console.log('res in factory : ', res); // method from controller return void
@@ -320,7 +330,6 @@
                     $scope.selectedStatusOption = null; // value of selected status
                     $scope.totalRecord = {!totalRecord}; // number of total records
                     $scope.lastPage =  Math.floor($scope.totalRecord / $scope.pageSize); // calculate the lastPage number
-                    console.log('Last Page: ', $scope.lastPage);
 //                    console.log('$scope: ', $scope.statusPickList);
 
                     $scope.initData = () => {
@@ -380,7 +389,6 @@
 
                     $scope.onPageSizeChange = () => {
                         $scope.lastPage = Math.floor($scope.totalRecord / $scope.pageSize); // recalculate the last page when $scope.pageSize change
-                        console.log('$scope Last page: ', $scope.lastPage);
                         $scope.initData(); // whenever change pageSize or number of Page ==> request list again
                     };
 

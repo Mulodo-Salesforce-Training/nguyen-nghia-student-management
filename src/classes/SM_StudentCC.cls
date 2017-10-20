@@ -10,7 +10,7 @@ global with sharing class SM_StudentCC {
 	@RemoteAction
 	global static List<Student__c> queryStudentPagination(Integer pageSize, Integer pageNum) {
 		pageNum *= pageSize;
-		return [SELECT Name, First_Name__c, Last_Name__c, Status__c FROM Student__c LIMIT :pageSize OFFSET :pageNum];
+		return [SELECT Id, Name, First_Name__c, Last_Name__c, Status__c FROM Student__c LIMIT :pageSize OFFSET :pageNum];
 	}
 //	@RemoteAction
 	global static String getStatusPickList() {

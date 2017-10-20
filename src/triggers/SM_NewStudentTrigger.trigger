@@ -1,4 +1,4 @@
-trigger SM_NewStudentTrigger on Student__c(after insert, after update, before insert, before update) {
+trigger SM_NewStudentTrigger on Student__c(after insert, after update) {
 	if (!system.isBatch() && !system.isFuture()) {
 
 		if(trigger.isUpdate || trigger.isInsert) {

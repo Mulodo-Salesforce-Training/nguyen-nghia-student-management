@@ -65,6 +65,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Avatar_Display__c</fullName>
+        <externalId>false</externalId>
+        <formula>IMAGE(&apos;/sfc/servlet.shepherd/version/download/&apos; + AvatarID__c, &apos;Image can not be displayed&apos; , 200, 200)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Avatar Display</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Birthday__c</fullName>
         <externalId>false</externalId>
         <label>Birthday</label>
@@ -163,6 +175,28 @@
                 </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>Map_Display__c</fullName>
+        <externalId>false</externalId>
+        <formula>IMAGE(
+  &quot;https://maps.googleapis.com/maps/api/staticmap?center=&quot; &amp;
+  TEXT(Map_Location__Latitude__s) &amp; &quot;,&quot; &amp; TEXT(Map_Location__Longitude__s) &amp;
+  &quot;&amp;zoom=16&amp;size=600x300&amp;&quot; &amp; 
+  &quot;markers=color:blue%7Clabel:S%7C&quot; &amp;
+  TEXT(Map_Location__Latitude__s) &amp; &quot;,&quot; &amp; TEXT(Map_Location__Longitude__s) &amp;
+  &quot;&amp;key=AIzaSyAk4lh1e88wZ542EMBnQWYmAbdan2vtfQM&quot;
+,
+  &apos;No Map Preview Available&apos;,
+  300, 600
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Map Display</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Map_Location__c</fullName>
@@ -362,4 +396,44 @@ NOT(OR(REGEX( Email__c ,&quot;\\w([^@\\s,;]+)@(mulodo\\.com)&quot;),
         <errorMessage>Phone Length should be between 10 and 11 number</errorMessage>
     </validationRules>
     <visibility>Public</visibility>
+    <webLinks>
+        <fullName>Avatar_Upload</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Avatar Upload</masterLabel>
+        <openType>sidebar</openType>
+        <page>SM_AvatarCustomActionPage</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Avatar_Upload_Button</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Avatar Upload Button</masterLabel>
+        <openType>newWindow</openType>
+        <page>SM_AvatarCustomActionPage</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Demo_Map_Page</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Demo Map Page</masterLabel>
+        <openType>sidebar</openType>
+        <page>EX_GoogleMap2</page>
+        <protected>false</protected>
+    </webLinks>
 </CustomObject>

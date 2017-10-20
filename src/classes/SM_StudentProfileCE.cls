@@ -8,7 +8,7 @@ public class SM_StudentProfileCE {
 	public Student__c targetStudent {get;set;}
 	public SM_StudentProfileCE(ApexPages.StandardController stdCtrl) {
 		studentId = ApexPages.currentPage().getParameters().get('id');
-		targetStudent = [SELECT Street__c, State_Province__c, Country__c, Map_Location__c FROM Student__c WHERE Id =: studentId];
+		targetStudent = [SELECT Street__c, State_Province__c, Country__c, Map_Location__c, Map_Location__Longitude__s, Map_Location__Latitude__s FROM Student__c WHERE Id =: studentId];
 	}
 
 	public String getStudentFullAdd() {
@@ -21,7 +21,7 @@ public class SM_StudentProfileCE {
 	}
 
 	public String getStudentLocation() {
-		if (targetStudent.Map_Location__c != null) {
+		if (targetStudent.Map_Location__Longitude__s != null && targetStudent.Map_Location__Latitude__s != null) {
 			return JSON.serialize(targetStudent.Map_Location__c);
 		} else {
 			return JSON.serialize(SM_GMapAPIUtil.getAddressInfo(getStudentFullAdd()));
@@ -31,10 +31,11 @@ public class SM_StudentProfileCE {
 
 	// DML not accept on constructor ===> move DML to other method here
 	public void initStudentLocation() {
-		if (targetStudent.Map_Location__c == null) {
+		if (targetStudent.Map_Location__Longitude__s == null || targetStudent.Map_Location__Latitude__s == null) {
 			String studentAddress = getStudentFullAdd();
 			if (studentAddress != null) {
 				SM_GMapAPIUtil.LatLng geo = SM_GMapAPIUtil.getAddressInfo(studentAddress);
+				System.debug(geo);
 				if (geo != null) {
 					targetStudent.Map_Location__Latitude__s = geo.lat;
 					targetStudent.Map_Location__Longitude__s = geo.lng;

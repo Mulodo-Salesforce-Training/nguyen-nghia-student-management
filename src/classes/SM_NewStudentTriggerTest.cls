@@ -4,18 +4,36 @@
 @isTest
 private class SM_NewStudentTriggerTest {
 	@TestSetup static void setupData() {
-		List<Student_Skill__c> skillList = new List<Student_Skill__c>();
+		List<Student_Skill__c> skillList;
+		List<Student__c> mockStudentList = new List<Student__c>();
+		List<RecordType> skillRT; // get recordType
+		Map<String, Id> skillRTMap = new Map<String, Id>(); // map Name, Id from skillRT
 		// get picklist values
 		Schema.DescribeFieldResult studentSkills = Student_Skill__c.Skill__c.getDescribe();
 		List<Schema.PicklistEntry> studentSkillOption = studentSkills.getPicklistValues();
 
-		for(Schema.PicklistEntry skill: studentSkillOption) {
-			skillList.add(new Student_Skill__c(
-					Active__c = true,
-					Skill__c = skill.getValue(),
-					Max_Point__c = 500
-			));
+		skillRT = [SELECT Name, Id FROM RecordType WHERE sObjectType = 'Student_Skill__c' and isActive = true];
+
+		for(RecordType type: skillRT) {
+			skillRTMap.put(type.Name, type.Id);
 		}
+
+		System.debug(studentSkillOption);
+
+//		for(Schema.PicklistEntry skill: studentSkillOption) {
+//			skillList.add(new Student_Skill__c(
+//					Active__c = true,
+//					Skill__c = skill.getLabel(),
+//					Max_Point__c = 500
+//					RecordType = skillRTMap.get('Java')
+//			));
+//		}
+		skillList = new List<Student_Skill__c> {
+				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('Java'), Skill__c = 'Java Basic Knowledge', Max_Point__c = 500),
+				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('PHP'), Skill__c = 'OOP', Max_Point__c = 500),
+				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('Salesforce'), Skill__c = 'Developer Beginner', Max_Point__c = 500),
+				new Student_Skill__c(Active__c = true, RecordTypeId = skillRTMap.get('Java'), Skill__c = 'Redis', Max_Point__c = 500)
+				};
 
 		insert skillList;
 	}
@@ -24,7 +42,7 @@ private class SM_NewStudentTriggerTest {
 		Schema.DescribeFieldResult studentSkills = Student_Skill__c.Skill__c.getDescribe();
 		List<Schema.PicklistEntry> studentSkillOption = studentSkills.getPicklistValues();
 
-		String skillSet = studentSkillOption[0].getValue() + ';' + studentSkillOption[1].getValue(); // mock skill set
+		String skillSet = 'Java Basic Knowledge;Redis'; // mock skill set
 		System.debug(skillSet);
 		Test.startTest();
 			List<Student__c> mockStudentList = new List<Student__c>();

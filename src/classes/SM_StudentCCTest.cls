@@ -65,6 +65,22 @@ private class SM_StudentCCTest {
 		Student__c updateStudent = [SELECT Status__c FROM Student__c WHERE Id =: targetIdList[0]];
 		System.assert(updateStudent.Status__c == 'Working', 'Student with id : ' + updateStudent.Id + ' should has status is working after update');
 
+	}
+
+	@isTest static void testStudentLevelBatchExecute() {
+
+		Test.startTest();
+		SM_StudentCC.studentLevelBatchExecute();
+		System.assert(!System.isBatch(), 'Batch is execute after 1 minutes');
+//		CronTrigger job = [SELECT ID FROM CronTrigger WHERE CronExpression = 'Student Level And Skill Executed' LIMIT 1];
+//		System.debug(job);
+//		System.assert(job != null, 'should be able to see this job ');
+		try {
+			SM_StudentCC.studentLevelBatchExecute(); // execute 2nd time
+		} catch (AsyncException e) {
+			System.assert(e.getMessage() != null, 'Will error if try to execute 2nd time');
+		}
+		Test.stopTest();
 
 	}
 }

@@ -1,0 +1,9 @@
+<apex:page standardController="Student__c" extensions="SM_StudentAvatarCE">
+    <apex:pageBlock >
+        <apex:image id="theImage" value="/sfc/servlet.shepherd/version/download/{!Student__c.AvatarID__c}?asPdf=false" width="200" height="200"/>
+        <apex:form >
+            <apex:inputFile id="imgUpload" value="{!file}" fileName="{!fileName}"/>
+            <apex:commandButton action="{!uploadAvatar}" value="Upload"/>
+        </apex:form>
+    </apex:pageBlock>
+</apex:page>
