@@ -16,6 +16,7 @@
     <body ng-app="mainApp">
     <!--Wrap all div in this to apply stylesheet from slds-->
         <div class="slds-scope"  ng-controller="listStudentController">
+
             <div class="slds-page-header">
                 <div class="slds-media">
                     <div class="slds-media__body">
@@ -26,7 +27,28 @@
                     </div>
                 </div>
             </div>
-
+            <!--TOAST NOTIFICATION-->
+            <div class="demo-only" style="height: 4rem;" ng-controller="toastController">
+                <div class="slds-notify_container slds-is-relative" ng-if="notifications.length > 0">
+                    <div class="slds-notify slds-notify_toast" ng-class="{'slds-theme_info': notifications[0].severity === 'info',  'slds-theme_success': notifications[0].severity === 'success'}" role="alert">
+                        <span class="slds-assistive-text">info</span>
+                        <span class="slds-icon_container slds-icon-utility-info slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}" />
+                            </svg>
+                        </span>
+                        <div class="slds-notify__content">
+                            <h2 class="slds-text-heading_small">{{notifications[0].message}}</h2>
+                        </div>
+                        <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" ng-click="markMessageAsRead()">
+                            <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}" />
+                            </svg>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <!--TOP BUTTON LIST-->
             <div class="slds-grid slds-grid_align-end slds-m-top_x-small slds-m-bottom_x-small">
                 <!--CLASS APPLY:-->
@@ -39,8 +61,10 @@
                     </apex:outputLink>
                     <button class="slds-button slds-button_neutral" onClick="redirectToImportWizard()">Import</button>
                     <button class="slds-button slds-button_neutral" ng-click="onChangeStatusClick()">Change Status</button>
+                    <button class="slds-button slds-button_neutral" onClick="popupCustomImportWizard()">Custom Import</button>
                 </div>
             </div>'
+
             <!--STUDENT LIST TABLE-->
             <table class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout">
                     <thead>
@@ -91,6 +115,11 @@
                                     View Map
                                 </div>
                             </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="View PDF">
+                                    View PDF
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,7 +129,11 @@
                         <!--CHECKBOX-->
                         <td class="slds-text-align_right" role="gridcell">
                             <span class="slds-checkbox">
-                              <input type="checkbox" name="options" ng-attr-id="{{'checkbox-' + $index}}"  ng-attr-checked="{{selectedList.has(student.Id)}}" ng-click="onSelectStudent(student.Id)"/>
+                              <input type="checkbox" name="options"
+                                     ng-model="selectedList"
+                                     ng-attr-id="{{'checkbox-' + $index}}"
+                                     ng-checked="{{selectedList.has(student.Id)}}"
+                                     ng-click="onSelectStudent(student.Id)"/>
                               <label class="slds-checkbox__label" ng-attr-for="{{'checkbox-'+ $index}}">
                                 <span class="slds-checkbox_faux"></span>
                                 <span class="slds-form-element__label slds-assistive-text">Select item 1</span>
@@ -140,7 +173,16 @@
                         <!--VIEW MAP-->
                         <td data-label="View Map">
                             <div class="slds-truncate">
-                                <a ng-attr-href="{!URLFOR($Page.Ex_GoogleMap2)}?id={{student.Id}}">View Map</a>
+                                <a ng-attr-href="{!URLFOR($Page.Ex_GoogleMap2)}&id={{student.Id}}">View Map</a>
+
+                            </div>
+                        </td>
+                        <!--VIEW PDF-->
+                        <td data-label="View Pdf">
+                            <div class="slds-truncate">
+                                <a ng-attr-href="{!URLFOR($Page.SM_StudentPDFView)}&id={{student.Id}}">
+                                    Export PDF
+                                </a>
 
                             </div>
                         </td>
@@ -266,6 +308,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div style="width: 100%; height: 150px">&nbsp;</div>
                         </div>
                         <footer class="slds-modal__footer">
                             <button class="slds-button slds-button_neutral" ng-click="onCloseModalClick()">Cancel</button>
@@ -296,6 +339,14 @@
             window.location.href = 'https://mulodo-recruitment-dev-ed.lightning.force.com/one/one.app?source=aloha#eyJjb21wb25lbnREZWYiOiJvbmU6YWxvaGFQYWdlIiwiYXR0cmlidXRlcyI6eyJ2YWx1ZXMiOnsiYWRkcmVzcyI6Ii91aS9zZXR1cC9kYXRhaW1wb3J0ZXIvRGF0YUltcG9ydGVyQWRtaW5MYW5kaW5nUGFnZT9yZXRVUkw9JTJGc2V0dXAlMkZob21lJnZmUmV0VVJMSW5TRlg9aHR0cHMlM0ElMkYlMkZtdWxvZG8tcmVjcnVpdG1lbnQtZGV2LWVkLmxpZ2h0bmluZy5mb3JjZS5jb20lMkZvbmUlMkZvbmUuYXBwJTNGc291cmNlJTNEYWxvaGElMjMlMkZzZXR1cCUyRnBhZ2UlM0Zub2RlSWQlM0RMYWJlbFdvcmtiZW5jaFNldHVwJTI2YWRkcmVzcyUzRCUyNTJGaTE4biUyNTJGVHJhbnNsYXRpb25TcGxhc2guYXBleHAlMjUzRnJldFVSTCUyNTNEJTI1MjUyRnNldHVwJTI1MjUyRmhvbWUlMjZhJTNBdCUzRDE1MDc4NzY3MjIxODciLCJoYXNIaXN0b3J5Ijp0cnVlfX0sImE6dCI6MTUwNzg3NjcyMzQ3MX0%3D'; // link to import page
         }
 
+        function popupCustomImportWizard() {
+            let newwindow = window.open('https://mulodo-recruitment-dev-ed--c.ap5.visual.force.com/apex/SM_ImportCSVWizardPage', 'Custom Import Wizard', 'height=400, width=400');
+            if (window.focus) {
+                newwindow.focus()
+            }
+
+        }
+
         angular.module('mainApp', [])
                 .factory('VFRemotingFactory', ($q, $rootScope) => {
                     const factory = {};
@@ -311,14 +362,27 @@
                     factory.changeSelectedStatus = (studentIdList, selectedStatus) => {
                         let deferred = $q.defer();
                         changeSelectedStatus((res) => {
-                            console.log('res in factory : ', res); // method from controller return void
-                            /** @TODO: We will add feature to notification later */
+                            deferred.resolve(res) // method from controller return void
                         }, studentIdList, selectedStatus);
                         return deferred.promise;
                     };
                     return factory;
                 })
-                .controller('listStudentController', ['$scope', 'VFRemotingFactory', ($scope, VFRemotingFactory) => {
+                .factory('NotificationService', function() {
+                    var messageQueues = [];
+                    return {
+                        pushNewMessage: function(message) {
+                            messageQueues = [...messageQueues, message]
+                        },
+                        getMessages: function() {
+                            return messageQueues;
+                        },
+                        removeReadMessage: function() {
+                            messageQueues = messageQueues.slice(1); // remove the first item in list
+                        }
+                    }
+                })
+                .controller('listStudentController', ['$scope', 'VFRemotingFactory', 'NotificationService', ($scope, VFRemotingFactory, NotificationService) => {
                     // declaration
                     $scope.pageSize = 5; // default page size
                     $scope.currentPage = 0; // default current page
@@ -361,7 +425,15 @@
                         VFRemotingFactory.changeSelectedStatus(
                             JSON.stringify([...$scope.selectedList]),
                                 $scope.selectedStatusOption
-                        );
+                        ).then(res => {
+                            if (res) {
+                                var successMessage = {
+                                    severity: 'success',
+                                    message: 'Change Status Completed!'
+                                }
+                                NotificationService.pushNewMessage(successMessage);
+                            }
+                        });
                         $scope.initData();
                         $scope.selectedList = new Set(); // reset selected list
                         $scope.isModalOpen = false; // close modal after complete
@@ -397,6 +469,19 @@
                         $scope.initData();
                     };
 
+
+                }])
+                .controller('toastController', ['$scope', 'NotificationService', ($scope, NotificationService) => {
+                    $scope.$watchCollection(function() {return NotificationService.getMessages()}, function(newValue, oldValue) {
+                        $scope.notifications = newValue;
+                    })
+                    $scope.markMessageAsRead = () => {
+                        NotificationService.removeReadMessage();
+                    }
+                    $scope.checkSeverity = (status) => {
+                        console.log($scope.notifications[0].severity === status);
+                        return $scope.notifications[0].severity === status;
+                    }
                 }])
     </script>
 

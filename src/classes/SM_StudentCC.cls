@@ -3,6 +3,12 @@
  */
 global with sharing class SM_StudentCC {
 	public Integer TotalRecord {get;set;}
+	public List<Student__c> importStudentList {get;set;} // List of student going to import
+	public Map<String, Integer> importFieldMap {get;set;} // indexOfColumn{Integer}, sObjectField{String}
+	public String importCSVfileName {get;set;}
+	public Blob importFile {get;set;}
+	public Integer importFileSize {get;set;}
+
 	public SM_StudentCC() {
 		TotalRecord = [SELECT Count() FROM Student__c]; // init total record to show on visualforce page
 	}
@@ -12,7 +18,7 @@ global with sharing class SM_StudentCC {
 		pageNum *= pageSize;
 		return [SELECT Id, Name, First_Name__c, Last_Name__c, Status__c FROM Student__c LIMIT :pageSize OFFSET :pageNum];
 	}
-//	@RemoteAction
+
 	global static String getStatusPickList() {
 		Schema.DescribeFieldResult statusField = Student__c.Status__c.getDescribe();
 		List<Schema.PicklistEntry> skillPickList = statusField.getPicklistValues();
@@ -46,5 +52,85 @@ global with sharing class SM_StudentCC {
 		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Student Level and Skill will be execute within 1 minute'));
 	}
 
+	global Set<String> getImportKeySet() {
+		return importFieldMap.keySet();
+	}
 
+	global void importCSV() {
+		try {
+			insert importStudentList;
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, importStudentList.size() + ' record(s) has been imported by wizard'));
+			cancelImportCSV();
+		} catch (DmlException e) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Dml Exception', e.getMessage()));
+		}
+	}
+
+	global void cancelImportCSV() {
+		importCSVfileName = null;
+		importFileSize = 0;
+		importFile = null;
+		importStudentList = null;
+	}
+
+	global void initImportFieldMap(List<String> titleLine) {
+		Set<String> studentFieldSet  = Schema.SObjectType.Student__c.fields.getMap().keySet();
+		importFieldMap = new Map<String, Integer>();
+		for(Integer i = 0; i < titleLine.size(); i ++) {
+//			System.debug(titleLine[i].toLowerCase());
+//			System.debug(titleLine[i] == 'phone__c');
+			if(studentFieldSet.contains(titleLine[i].toLowerCase().trim())) {
+//				System.debug(titleLine[i]);
+				importFieldMap.put(titleLine[i].toLowerCase().trim(), i); // add exist fields in field Map
+			} else {
+//				System.debug('Not found column ' + titleLine[i]);
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'Column ' + titleLine[i] + 'is not exist in SObject Student__c'));
+				return; // return if has error
+			}
+		}
+	}
+
+
+	global List<Student__c> parseStudentFromCSV(Blob file, String fileName) {
+		List<String> fileNameArray; // split file name by dot
+		// fileSize should not greater than 10MB also ===> will check in UI
+		SM_CSVReaderUtil csvReader = new SM_CSVReaderUtil(file.toString());
+		List<String> titleLine;  // read the first line (title line) if has title if not skipped here
+		List<String> eachLine; // each line in the body of csv file
+		List<Student__c> importStudentList = new List<Student__c>();
+
+		fileNameArray = fileName.split('\\.');
+		if (fileNameArray[fileNameArray.size() - 1] != 'csv') {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'File with extension: ' + fileNameArray[fileNameArray.size() - 1] + 'is not support in this wizard' ));
+			return null;
+		}
+
+		// execute
+		titleLine = csvReader.readLine();
+//		System.debug(titleLine);
+		if (titleLine == null) {
+//			System.debug('Catch here');
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'This ' + fileName + 'is Empty. Please double check again'));
+			return null; // if first line = null => empty File
+		}
+
+		initImportFieldMap(titleLine);
+
+		eachLine = csvReader.readLine();
+
+		while(eachLine != null) {
+			sObject addStudent = Schema.getGlobalDescribe().get('Student__c').newSObject();
+			for(String key: importFieldMap.keySet()) {
+				addStudent.put(key, eachLine[importFieldMap.get(key)]);
+			}
+			importStudentList.add((Student__c)addStudent);
+
+			eachLine = csvReader.readLine(); // reassign to the next line
+		}
+		return importStudentList;
+	}
+
+	global void setImportStudentList() {
+		importStudentList = parseStudentFromCSV(importFile, importCSVfileName);
+	}
 }

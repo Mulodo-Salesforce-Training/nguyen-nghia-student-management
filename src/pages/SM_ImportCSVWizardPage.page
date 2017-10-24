@@ -1,0 +1,33 @@
+<apex:page controller="SM_StudentCC">
+    <apex:pageBlock >
+        <apex:pageMessages />
+
+        <apex:pageBlockSection rendered="{!importStudentList != null}">
+            <h3>Data Preview</h3>
+            <table>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                </tr>
+                <apex:repeat var="student" value="{!importStudentList}">
+                    <tr >
+                        <td>{!student.First_Name__c}</td>
+                        <td>{!student.Last_Name__c}</td>
+                        <td>{!student.Phone__c}</td>
+                        <td>{!student.Email__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+
+        </apex:pageBlockSection>
+        <apex:form >
+            <apex:inputFile fileName="{!importCSVFileName}" value="{!importFile}" fileSize="{!importFileSize}" rendered="{!importStudentList == null}"/>
+            <apex:commandButton value="Preview" action="{!setImportStudentList}" rendered="{!importStudentList == null}"/>
+            <apex:commandButton value="Import" action="{!importCSV}" rendered="{!importStudentList != null}"/>
+            <apex:commandButton value="Cancel" action="{!cancelImportCSV}" rendered="{!importStudentList != null}"/>
+        </apex:form>
+    </apex:pageBlock>
+
+</apex:page>

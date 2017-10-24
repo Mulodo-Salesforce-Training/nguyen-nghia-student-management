@@ -27,7 +27,6 @@ public class SM_StudentProfileCE {
 			return JSON.serialize(SM_GMapAPIUtil.getAddressInfo(getStudentFullAdd()));
 		}
 
-
 	}
 
 	// DML not accept on constructor ===> move DML to other method here

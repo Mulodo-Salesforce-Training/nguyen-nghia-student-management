@@ -83,4 +83,15 @@ private class SM_StudentCCTest {
 		Test.stopTest();
 
 	}
+
+	@isTest static void testParseStudentFromCSVMethod() {
+		String mockImportCSVString = 	'First_Name__c,Last_Name__c,Email__c\n' +
+										'Nghia,Nguyen,nguyen.nghia@mulodo.com\n' +
+										'Trung,Nguyen,trung.nguyen@mulodo.com';
+		Blob mockCSVFile = Blob.valueOf(mockImportCSVString);
+		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+		List<Student__c> studentList = studentCustomCtrl.parseStudentFromCSV(mockCSVFile, 'demo.csv');
+		System.assertEquals(studentList.size(), 2, 'Expect will have 2 student in list');
+		System.assertEquals(studentList[0].First_Name__c, 'Nghia', 'Expect exactly import student');
+	}
 }
