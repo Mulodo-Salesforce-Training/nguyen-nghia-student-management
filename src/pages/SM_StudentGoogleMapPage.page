@@ -1,0 +1,53 @@
+<apex:page standardController="Student__c" extensions="SM_StudentProfileCE" action="{!initStudentLocation}">
+
+    <head>
+        <!--MY KEY: AIzaSyBJP-Q9nNDZdEKV9fnGgVkA9eoefUqbJdk-->
+        <!--Example Student Id: a057F000001NZpMQAW-->
+        <style>
+            #map {
+                font-family: Arial;
+                font-size:10px;
+                line-height:normal !important;
+                height:300px;
+                background:transparent;
+            }
+        </style>
+
+    </head>
+
+    <body>
+    <div >
+        <h1 id="errorMessage"></h1>
+    </div>
+    <div id="map"></div>
+    <script>
+        var studentFullAddress = '{!studentFullAdd}';
+        var studentLatLng = {!studentLocation};
+        if (!studentLatLng || (studentLatLng && (studentLatLng.latitude == null  || studentLatLng.longitude == null))) {
+            var errorMessage = document.createTextNode('Map of this student is not available. Please check Street - State/Province and Country again');
+            document.getElementById('errorMessage').appendChild(errorMessage);
+        }
+        function initMap() {
+//            var uluru = {lat: 10.772426, lng: 106.698880};
+            var uluru = studentLatLng ? {lat: studentLatLng.latitude, lng: studentLatLng.longitude} : null;
+            var map = uluru ? new google.maps.Map(document.getElementById('map'), {
+                zoom: 16,
+                center: uluru
+            }) : null;
+            var marker = uluru ? new google.maps.Marker({
+                position: uluru,
+                map
+            }): null;
+
+//            var studentMarker = new google.maps.Marker({
+//                position: {lat: studentLatLng.latitude, lng: studentLatLng.longitude},
+//                map
+//            })
+
+        }
+    </script>
+
+    <script async="async" defer="defer" src="https://maps.google.com/maps/api/js?key=AIzaSyBJP-Q9nNDZdEKV9fnGgVkA9eoefUqbJdk
+&callback=initMap"></script>
+    </body>
+</apex:page>

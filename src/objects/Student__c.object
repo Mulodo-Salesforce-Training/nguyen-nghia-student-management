@@ -179,7 +179,11 @@
     <fields>
         <fullName>Map_Display__c</fullName>
         <externalId>false</externalId>
-        <formula>IMAGE(
+        <formula>IF(OR(
+         ISBLANK(Map_Location__Latitude__s),
+         ISBLANK(Map_Location__Longitude__s)
+      ) , &apos;Map preview is not available now&apos;,
+ IMAGE(
   &quot;https://maps.googleapis.com/maps/api/staticmap?center=&quot; &amp;
   TEXT(Map_Location__Latitude__s) &amp; &quot;,&quot; &amp; TEXT(Map_Location__Longitude__s) &amp;
   &quot;&amp;zoom=16&amp;size=600x300&amp;&quot; &amp; 
@@ -189,8 +193,7 @@
 ,
   &apos;No Map Preview Available&apos;,
   300, 600
-)</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+))</formula>
         <label>Map Display</label>
         <required>false</required>
         <trackHistory>false</trackHistory>

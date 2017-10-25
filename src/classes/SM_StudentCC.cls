@@ -6,9 +6,8 @@ global with sharing class SM_StudentCC {
 	public List<Student__c> importStudentList {get;set;} // List of student going to import
 	public Map<String, Integer> importFieldMap {get;set;} // indexOfColumn{Integer}, sObjectField{String}
 	public String importCSVfileName {get;set;}
-	public Blob importFile {get;set;}
+	public transient Blob importFile {get;set;}
 	public Integer importFileSize {get;set;}
-
 	public SM_StudentCC() {
 		TotalRecord = [SELECT Count() FROM Student__c]; // init total record to show on visualforce page
 	}
@@ -90,32 +89,31 @@ global with sharing class SM_StudentCC {
 		}
 	}
 
-
 	global List<Student__c> parseStudentFromCSV(Blob file, String fileName) {
 		List<String> fileNameArray; // split file name by dot
-		// fileSize should not greater than 10MB also ===> will check in UI
-		SM_CSVReaderUtil csvReader = new SM_CSVReaderUtil(file.toString());
-		List<String> titleLine;  // read the first line (title line) if has title if not skipped here
-		List<String> eachLine; // each line in the body of csv file
-		List<Student__c> importStudentList = new List<Student__c>();
-
 		fileNameArray = fileName.split('\\.');
 		if (fileNameArray[fileNameArray.size() - 1] != 'csv') {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'File with extension: ' + fileNameArray[fileNameArray.size() - 1] + 'is not support in this wizard' ));
 			return null;
 		}
+		SM_CSVReaderUtil csvReader = new SM_CSVReaderUtil(file.toString());
+		List<String> titleLine;  // read the first line (title line) if has title if not skipped here
+		List<String> eachLine; // each line in the body of csv file
+		List<Student__c> importStudentList = new List<Student__c>();
+
 
 		// execute
 		titleLine = csvReader.readLine();
-//		System.debug(titleLine);
-		if (titleLine == null) {
-//			System.debug('Catch here');
+		if (titleLine == null || titleLine.isEmpty() || titleLine.size() == 1 && titleLine[0] == '') {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'This ' + fileName + 'is Empty. Please double check again'));
 			return null; // if first line = null => empty File
 		}
 
 		initImportFieldMap(titleLine);
-
+		if (importFieldMap == null || importFieldMap.isEmpty()) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Not found any column definition on this CSV file. Import operation is aborted'));
+			return null;
+		}
 		eachLine = csvReader.readLine();
 
 		while(eachLine != null) {
@@ -131,6 +129,11 @@ global with sharing class SM_StudentCC {
 	}
 
 	global void setImportStudentList() {
-		importStudentList = parseStudentFromCSV(importFile, importCSVfileName);
+		try {
+			importStudentList = parseStudentFromCSV(importFile, importCSVfileName);
+		} catch (LimitException e) { // limit exception can't be caught
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+		}
+
 	}
 }

@@ -24,7 +24,7 @@
         </apex:pageBlockSection>
         <apex:form >
             <apex:inputFile fileName="{!importCSVFileName}" value="{!importFile}" fileSize="{!importFileSize}" rendered="{!importStudentList == null}"/>
-            <apex:commandButton value="Preview" action="{!setImportStudentList}" rendered="{!importStudentList == null}"/>
+            <apex:commandButton value="Preview" action="{!setImportStudentList}" rendered="{!importFile != null && importStudentList == null}"/>
             <apex:commandButton value="Import" action="{!importCSV}" rendered="{!importStudentList != null}"/>
             <apex:commandButton value="Cancel" action="{!cancelImportCSV}" rendered="{!importStudentList != null}"/>
         </apex:form>

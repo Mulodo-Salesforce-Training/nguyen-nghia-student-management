@@ -22,7 +22,7 @@ public with sharing class SM_GMapAPIUtil {
 				geo = googleRes.results[0].geometry.location;
 			}
 		} catch (Exception e) {
-			ApexPages.addMessages(e);
+			System.debug(e);
 			return null;
 		}
 		return geo;

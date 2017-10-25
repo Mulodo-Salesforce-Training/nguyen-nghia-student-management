@@ -100,6 +100,9 @@ private class SM_StudentCCTest {
 		Blob mockCSVFile = Blob.valueOf(mockImportCSVString);
 		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
 
+		List<Student__c> emptyFileImportList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(''), 'emptyFile.csv');
+		System.assertEquals(emptyFileImportList, null, 'Should be return nothing if empty file input');
+
 		List<Student__c> invalidFileNameList = studentCustomCtrl.parseStudentFromCSV(mockCSVFile, 'wrongExtension.ext');
 		System.assertEquals(invalidFileNameList, null, 'Should be able to prevent wrong extension input');
 
@@ -109,14 +112,27 @@ private class SM_StudentCCTest {
 		List<Student__c> noHeadstudentList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(noHeadCSVString), 'demo.csv');
 		System.assertEquals(noHeadstudentList, null, 'Should be able to prevent no head csv file');
 
-		List<Student__c> studentList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(noHeadCSVString), 'demo.csv');
-
-
+		List<Student__c> studentList = studentCustomCtrl.parseStudentFromCSV(mockCSVFile, 'demo.csv');
 		System.assertEquals(studentCustomCtrl.importFieldMap.size(), 3, 'Expect there are 3 fields when import');
 		System.assertEquals(studentCustomCtrl.getImportKeySet().size(), 3, 'Expect there are 3 key in set when import');
 		System.assertEquals(studentList.size(), 2, 'Expect will have 2 student in list');
 		System.assertEquals(studentList[0].First_Name__c, 'Nghia', 'Expect exactly import student');
 	}
+
+	@isTest static void testExceptionParseStudentFromCSVMethod() {
+		Student__c errorStudent = new Student__c(
+			First_Name__c = 'Nghia'
+		); // missing email student
+		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+		studentCustomCtrl.importStudentList = new List<Student__c> {errorStudent};
+		try {
+			studentCustomCtrl.importCSV();
+		} catch (DMlException e) {
+			System.assert(e.getMessage() != null, 'Expect to be able to get the error message');
+		}
+
+	}
+
 	@isTest static void testGetSetImportMethod() {
 		String mockImportCSVString = 	'First_Name__c,Last_Name__c,Email__c\n' +
 				'Import_1, Nguyen,nguyen.nghia@mulodo.com\n' +

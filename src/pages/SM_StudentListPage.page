@@ -72,13 +72,13 @@
                         <!--CHECK BOX-->
                             <th class="slds-text-align_right" scope="col" style="width: 3.25rem;">
                                 <div class="slds-th__action slds-th__action_form">
-                                  <span class="slds-checkbox">
-                                    <input type="checkbox" name="options" id="checkbox-353" tabindex="0" value="on" checked="" />
-                                    <label class="slds-checkbox__label" for="checkbox-353">
-                                      <span class="slds-checkbox_faux"></span>
-                                      <span class="slds-form-element__label slds-assistive-text">Select All</span>
-                                    </label>
-                                  </span>
+                                  <!--<span class="slds-checkbox">-->
+                                    <!--<input type="checkbox" name="options" id="checkbox-353" tabindex="0" value="on" checked="" />-->
+                                    <!--<label class="slds-checkbox__label" for="checkbox-353">-->
+                                      <!--<span class="slds-checkbox_faux"></span>-->
+                                      <!--<span class="slds-form-element__label slds-assistive-text">Select All</span>-->
+                                    <!--</label>-->
+                                  <!--</span>-->&nbsp;
                                 </div>
                             </th>
                             <th scope="col">
@@ -167,7 +167,7 @@
                         <!--VIEW MAP-->
                         <td data-label="View Map">
                             <div class="slds-truncate">
-                                <a ng-attr-href="{!URLFOR($Page.Ex_GoogleMap2)}&id={{student.Id}}">View Map</a>
+                                <a ng-attr-href="{!URLFOR($Page.SM_StudentGoogleMapPage)}&id={{student.Id}}">View Map</a>
 
                             </div>
                         </td>
@@ -187,7 +187,7 @@
             <div class="slds-grid slds-m-top_small slds-m-bottom_small">
                 <!--CURRENT PAGE INFO-->
                 <div class="slds-col">
-                    Page: {{currentPage}}
+                    Page: {{currentPage + 1}}
                     <!--<apex:outputText value="{!PageNumber} of {!CEILING(ResultSize/ PageSize)}"/>-->
                 </div>
                 <!--ACTION TO MOVE BACKWARD/FORWARD-->
@@ -389,7 +389,7 @@
                     // event declaration
                     $scope.onChangeStatusClick = () => {
                         if ($scope.selectedList.size === 0) {
-                            alert('You should selected at least 1 student to change status');
+                            alert('You should select at least 1 student to change status');
                             return;
                         }
                         $scope.isModalOpen = true;
