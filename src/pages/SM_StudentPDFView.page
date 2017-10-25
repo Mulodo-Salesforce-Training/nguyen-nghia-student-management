@@ -1,5 +1,5 @@
 <apex:page standardController="Student__c" extensions="SM_StudentAvatarCE" renderAs="pdf">
-    <apex:pageBlock>
+    <apex:pageBlock >
         <div style="width: 100%; display: block">
             <div>
                 <h1>Student Information</h1>
@@ -9,32 +9,32 @@
                 <table>
                     <tr>
                         <td><span><b>Id</b></span></td>
-                        <td><apex:outputText value="{!student__c.Name}"/></td>
+                        <td><apex:outputText value="{!Student__c.Name}"/></td>
                     </tr>
                     <tr>
                         <td><span><b>First Name</b></span></td>
-                        <td><apex:outputText value="{!student__c.First_Name__c}"/></td>
+                        <td><apex:outputText value="{!Student__c.First_Name__c}"/></td>
                     </tr>
                     <tr>
                         <td><span><b>Last Name</b></span></td>
-                        <td><apex:outputText value="{!student__c.Last_Name__c}"/></td>
+                        <td><apex:outputText value="{!Student__c.Last_Name__c}"/></td>
                     </tr>
                     <tr>
                         <td><span><b>Email</b></span></td>
-                        <td><apex:outputText value="{!student__c.Email__c}"/></td>
+                        <td><apex:outputText value="{!Student__c.Email__c}"/></td>
                     </tr>
                     <tr>
                         <td><span><b>Phone</b></span></td>
-                        <td><apex:outputText value="{!student__c.Phone__c}"/></td>
+                        <td><apex:outputText value="{!Student__c.Phone__c}"/></td>
                     </tr>
                 </table>
             </div>
             <div style="width: 50%; float: left">
-                <apex:outputText value ="{!student__c.Avatar_Display__c}" escape="false"/>
+                <apex:outputText value="{!Student__c.Avatar_Display__c}" escape="false"/>
             </div>
             <div style="clear: both"></div>
             <div style="width: 100%">
-                <apex:outputText value="{!student__c.Map_Display__c}" escape="false"/>
+                <apex:outputText value="{!Student__c.Map_Display__c}" escape="false"/>
             </div>
 
         </div>

@@ -81,12 +81,6 @@
                                   </span>
                                 </div>
                             </th>
-                            <!--<th scope="col">-->
-                                <!--<div class="slds-truncate">-->
-                                    <!--&nbsp;-->
-                                <!--</div>-->
-                            <!--</th>-->
-                            <!--NAME-->
                             <th scope="col">
                                 <div class="slds-truncate" title="{!$ObjectType.Student__c.fields.Name.Label}">
                                         {!$ObjectType.Student__c.fields.Name.Label}
@@ -223,21 +217,7 @@
                             ng-model="pageSize"
                             ng-change="onPageSizeChange()"
                             ng-options="pageOp as pageOp for pageOp in pageSizeOption"></select>
-                    <!--<select class="slds-float_right" ng-model="pageSize" name="pageOptionSelect" id="pageOptionSelect">-->
-                        <!--&lt;!&ndash;LOOP OPTION HERE&ndash;&gt;-->
 
-                        <!--&lt;!&ndash;<option ng-repeat="pageOp in pageSizeOption"&ndash;&gt;-->
-                                <!--&lt;!&ndash;value="{{pageOp}}"&ndash;&gt;-->
-                        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;{{pageOp}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;</option>&ndash;&gt;-->
-                        <!--<option ng-repeat="pageOp in pageSizeOption" value="{{pageOp}}">{{pageOp}}</option>-->
-                    <!--</select>-->
-                    <!--<apex:selectList value="{!PageSize}" size="1" styleClass="slds-float_right">-->
-                        <!--<apex:selectOption itemValue="5" itemLabel="5"/>-->
-                        <!--<apex:selectOption itemValue="10" itemLabel="10"/>-->
-                        <!--<apex:actionSupport event="onchange" reRender="candidate_list_table"/>-->
-                    <!--</apex:selectList>-->
                     <span class="slds-float_right">Records per page:</span>
                 </div>
             </div>

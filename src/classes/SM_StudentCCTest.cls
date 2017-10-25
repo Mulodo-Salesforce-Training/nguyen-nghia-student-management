@@ -88,10 +88,58 @@ private class SM_StudentCCTest {
 		String mockImportCSVString = 	'First_Name__c,Last_Name__c,Email__c\n' +
 										'Nghia,Nguyen,nguyen.nghia@mulodo.com\n' +
 										'Trung,Nguyen,trung.nguyen@mulodo.com';
+
+		String mockInvalidColumnCSVString = 'Wrong_Column_c,Last_Name__c,Email__c\n' +
+				'Nghia,Nguyen,nguyen.nghia@mulodo.com\n' +
+				'Trung,Nguyen,trung.nguyen@mulodo.com';
+
+		String noHeadCSVString = 'Nghia,Nguyen,nguyen.nghia@mulodo.com\n' +
+				'Trung,Nguyen,trung.nguyen@mulodo.com';
+
+		String mockFileName = 'testing.csv';
 		Blob mockCSVFile = Blob.valueOf(mockImportCSVString);
 		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
-		List<Student__c> studentList = studentCustomCtrl.parseStudentFromCSV(mockCSVFile, 'demo.csv');
+
+		List<Student__c> invalidFileNameList = studentCustomCtrl.parseStudentFromCSV(mockCSVFile, 'wrongExtension.ext');
+		System.assertEquals(invalidFileNameList, null, 'Should be able to prevent wrong extension input');
+
+		List<Student__c> invalidColumnList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(mockInvalidColumnCSVString), mockFileName);
+		System.assertEquals(invalidColumnList, null, 'Should be able to prevent wrong column when import');
+
+		List<Student__c> noHeadstudentList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(noHeadCSVString), 'demo.csv');
+		System.assertEquals(noHeadstudentList, null, 'Should be able to prevent no head csv file');
+
+		List<Student__c> studentList = studentCustomCtrl.parseStudentFromCSV(Blob.valueOf(noHeadCSVString), 'demo.csv');
+
+
+		System.assertEquals(studentCustomCtrl.importFieldMap.size(), 3, 'Expect there are 3 fields when import');
+		System.assertEquals(studentCustomCtrl.getImportKeySet().size(), 3, 'Expect there are 3 key in set when import');
 		System.assertEquals(studentList.size(), 2, 'Expect will have 2 student in list');
 		System.assertEquals(studentList[0].First_Name__c, 'Nghia', 'Expect exactly import student');
 	}
+	@isTest static void testGetSetImportMethod() {
+		String mockImportCSVString = 	'First_Name__c,Last_Name__c,Email__c\n' +
+				'Import_1, Nguyen,nguyen.nghia@mulodo.com\n' +
+				'Import_2, Nguyen,trung.nguyen@mulodo.com';
+		String mockFileName = 'testing.csv';
+		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+		studentCustomCtrl.importCSVfileName = mockFileName;
+		System.assertEquals(studentCustomCtrl.importCSVfileName, 'testing.csv', 'Expect be able to set fileName');
+		studentCustomCtrl.importFile = Blob.valueOf(mockImportCSVString);
+		System.assert(studentCustomCtrl.importFile.size() > 0, 'Expect to be able to set blob(file content)');
+		studentCustomCtrl.setImportStudentList();
+		System.assertEquals(studentCustomCtrl.importStudentList.size(), 2, 'Should be able to get 2 imports students');
+		Test.startTest();
+			studentCustomCtrl.importCSV();
+		Test.stopTest();
+		List<Student__c> importedStudent = [SELECT Id FROM Student__c WHERE First_Name__c LIKE 'Import_%'];
+		System.assertEquals(importedStudent.size() , 2, 'Expect to get 2 imported student from SOQL');
+
+		studentCustomCtrl.cancelImportCSV();
+		System.assert(studentCustomCtrl.importFile == null, 'Expect to be able to wipe out importFile content');
+		System.assert(studentCustomCtrl.importCSVfileName == null, 'Expect to be able to wipe out importCSVFileName');
+		System.assert(studentCustomCtrl.importFileSize == 0, 'Expect fileSize after wipe to be 0');
+		System.assert(studentCustomCtrl.importStudentList == null, 'Expect to be able to wipe out import Student List');
+	}
+
 }

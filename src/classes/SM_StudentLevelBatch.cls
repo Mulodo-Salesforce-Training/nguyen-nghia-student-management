@@ -24,6 +24,9 @@ public class SM_StudentLevelBatch implements Database.Batchable<sObject>{
 	}
 
 	public Void finish(Database.BatchableContext jobId) {
+		AsyncApexJob job = [SELECT Id, CreatedById, TotalJobItems FROM AsyncApexJob WHERE  Id =: jobId.getJobId()];
+		User adminUser = [SELECT Id, Email FROM User WHERE Id =: job.CreatedById];
+		SM_EmailHelperUtil.sendMailUsingSFTemplate(adminUser, 'System_Status_Notification');
 	}
 
 }
