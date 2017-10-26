@@ -187,7 +187,7 @@
             <div class="slds-grid slds-m-top_small slds-m-bottom_small">
                 <!--CURRENT PAGE INFO-->
                 <div class="slds-col">
-                    Page: {{currentPage + 1}}
+                    Page: {{currentPage + 1}} / {{lastPage + 1}}
                     <!--<apex:outputText value="{!PageNumber} of {!CEILING(ResultSize/ PageSize)}"/>-->
                 </div>
                 <!--ACTION TO MOVE BACKWARD/FORWARD-->
