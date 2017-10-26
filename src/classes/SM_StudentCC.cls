@@ -83,7 +83,7 @@ global with sharing class SM_StudentCC {
 				importFieldMap.put(titleLine[i].toLowerCase().trim(), i); // add exist fields in field Map
 			} else {
 //				System.debug('Not found column ' + titleLine[i]);
-				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'Column ' + titleLine[i] + 'is not exist in SObject Student__c'));
+				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'Column ' + titleLine[i] + ' is not exist in SObject Student__c'));
 				return; // return if has error
 			}
 		}
@@ -93,7 +93,7 @@ global with sharing class SM_StudentCC {
 		List<String> fileNameArray; // split file name by dot
 		fileNameArray = fileName.split('\\.');
 		if (fileNameArray[fileNameArray.size() - 1] != 'csv') {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'File with extension: ' + fileNameArray[fileNameArray.size() - 1] + 'is not support in this wizard' ));
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'File with extension: ' + fileNameArray[fileNameArray.size() - 1] + ' is not support in this wizard' ));
 			return null;
 		}
 		SM_CSVReaderUtil csvReader = new SM_CSVReaderUtil(file.toString());
@@ -104,8 +104,10 @@ global with sharing class SM_StudentCC {
 
 		// execute
 		titleLine = csvReader.readLine();
+//		System.debug(titleLine);
+//		System.debug(titleLine.size());
 		if (titleLine == null || titleLine.isEmpty() || titleLine.size() == 1 && titleLine[0] == '') {
-			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'This ' + fileName + 'is Empty. Please double check again'));
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'This ' + fileName + ' is Empty. Please double check again'));
 			return null; // if first line = null => empty File
 		}
 
@@ -129,6 +131,14 @@ global with sharing class SM_StudentCC {
 	}
 
 	global void setImportStudentList() {
+		if (importFile == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please choose file before click preview '));
+			return;
+		}
+		if (importCSVfileName == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'file name should not be blank'));
+			return;
+		}
 		try {
 			importStudentList = parseStudentFromCSV(importFile, importCSVfileName);
 		} catch (LimitException e) { // limit exception can't be caught

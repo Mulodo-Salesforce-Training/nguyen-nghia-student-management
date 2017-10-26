@@ -138,16 +138,22 @@ private class SM_StudentCCTest {
 				'Import_1, Nguyen,nguyen.nghia@mulodo.com\n' +
 				'Import_2, Nguyen,trung.nguyen@mulodo.com';
 		String mockFileName = 'testing.csv';
+
 		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+
 		studentCustomCtrl.importCSVfileName = mockFileName;
 		System.assertEquals(studentCustomCtrl.importCSVfileName, 'testing.csv', 'Expect be able to set fileName');
+
 		studentCustomCtrl.importFile = Blob.valueOf(mockImportCSVString);
 		System.assert(studentCustomCtrl.importFile.size() > 0, 'Expect to be able to set blob(file content)');
+
 		studentCustomCtrl.setImportStudentList();
 		System.assertEquals(studentCustomCtrl.importStudentList.size(), 2, 'Should be able to get 2 imports students');
+
 		Test.startTest();
 			studentCustomCtrl.importCSV();
 		Test.stopTest();
+
 		List<Student__c> importedStudent = [SELECT Id FROM Student__c WHERE First_Name__c LIKE 'Import_%'];
 		System.assertEquals(importedStudent.size() , 2, 'Expect to get 2 imported student from SOQL');
 
@@ -156,6 +162,29 @@ private class SM_StudentCCTest {
 		System.assert(studentCustomCtrl.importCSVfileName == null, 'Expect to be able to wipe out importCSVFileName');
 		System.assert(studentCustomCtrl.importFileSize == 0, 'Expect fileSize after wipe to be 0');
 		System.assert(studentCustomCtrl.importStudentList == null, 'Expect to be able to wipe out import Student List');
+	}
+
+	@isTest static void testSetNullInImportMethod() {
+		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+		PageReference pageRef = Page.SM_ImportCSVWizardPage;
+		Test.setCurrentPage(pageRef);
+		/** Test case: null importFile and null importFileName*/
+		studentCustomCtrl.setImportStudentList();
+		System.assertEquals(ApexPages.getMessages()[0].getSummary(), 'Please choose file before click preview ', 'Expect to be able to get error message');
+		System.assert(studentCustomCtrl.importStudentList == null, 'Expect to not set data of import student List');
+
+
+	}
+
+	@isTest static void testNullFileNameInImportMethod() {
+		SM_StudentCC studentCustomCtrl = new SM_StudentCC();
+		PageReference pageRef = Page.SM_ImportCSVWizardPage;
+		Test.setCurrentPage(pageRef);
+		/** Test case: null importFileName*/
+		studentCustomCtrl.importFile = Blob.valueOf('demoBlob');
+		studentCustomCtrl.setImportStudentList();
+		System.assertEquals(ApexPages.getMessages()[0].getSummary(), 'file name should not be blank', 'Expect to be able to get error message');
+		System.assert(studentCustomCtrl.importStudentList == null, 'Expect to not set data of import student List');
 	}
 
 }

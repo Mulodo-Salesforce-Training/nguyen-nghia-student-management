@@ -15,8 +15,8 @@
                     <tr >
                         <td>{!student.First_Name__c}</td>
                         <td>{!student.Last_Name__c}</td>
-                        <td>{!student.Phone__c}</td>
                         <td>{!student.Email__c}</td>
+                        <td>{!student.Phone__c}</td>
                     </tr>
                 </apex:repeat>
             </table>
@@ -24,7 +24,7 @@
         </apex:pageBlockSection>
         <apex:form >
             <apex:inputFile fileName="{!importCSVFileName}" value="{!importFile}" fileSize="{!importFileSize}" rendered="{!importStudentList == null}"/>
-            <apex:commandButton value="Preview" action="{!setImportStudentList}" rendered="{!importFile != null && importStudentList == null}"/>
+            <apex:commandButton value="Preview" action="{!setImportStudentList}" rendered="{!importStudentList == null}"/>
             <apex:commandButton value="Import" action="{!importCSV}" rendered="{!importStudentList != null}"/>
             <apex:commandButton value="Cancel" action="{!cancelImportCSV}" rendered="{!importStudentList != null}"/>
         </apex:form>
