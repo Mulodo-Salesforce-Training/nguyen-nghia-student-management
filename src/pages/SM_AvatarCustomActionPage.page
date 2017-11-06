@@ -7,7 +7,5 @@
             <apex:commandButton action="{!uploadAvatar}" value="Upload"/>
         </apex:form>
     </apex:pageBlock>
-    <script>
-        console.log('Img Upload', document.getElementById('imgUpload'));
-    </script>
+
 </apex:page>

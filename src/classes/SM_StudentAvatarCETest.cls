@@ -33,6 +33,18 @@ private class SM_StudentAvatarCETest {
 		System.assert(updateStudent.AvatarID__c != null, 'Should be able to get avatarId after upload avatar');
 	}
 
+	@isTest static void testEmptyUploadFile() {
+		PageReference pageRef = Page.SM_AvatarCustomActionPage;
+		Student__c targetStudent = [SELECT Id, AvatarID__c FROM Student__c LIMIT 1];
+		ApexPages.StandardController stdCtrl = new ApexPages.StandardController(targetStudent);
+		SM_StudentAvatarCE studentAvatarCE = new SM_StudentAvatarCE(stdCtrl);
+		Test.setCurrentPage(pageRef);
+		Test.startTest();
+			studentAvatarCE.uploadAvatar();
+			System.assertEquals(ApexPages.getMessages()[0].getSummary(), 'There is no file selected', 'Should be able to prevent empty upload');
+		Test.stopTest();
+	}
+
 	@isTest static void testWrongExtensionUploadFile() {
 		PageReference pageRef = Page.SM_AvatarCustomActionPage;
 		Student__c targetStudent = [SELECT Id, AvatarID__c FROM Student__c LIMIT 1];

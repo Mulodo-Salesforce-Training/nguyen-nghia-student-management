@@ -21,6 +21,10 @@ public class SM_StudentAvatarCE {
 	}
 
 	public void uploadAvatar() {
+		if (fileName == null || file == null) {
+			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'There is no file selected'));
+			return;
+		}
 		List<String> splitFileName = fileName.split('\\.');
 		if (!VALID_IMAGE_EXTENSION.contains(splitFileName[splitFileName.size() - 1])) {
 			ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Extension '+ splitFileName[splitFileName.size() -1] + ' is not a valid type'));
@@ -36,6 +40,7 @@ public class SM_StudentAvatarCE {
 		Id imageId = upload();
 		selectedStudent.AvatarID__c	= imageId;
 		update selectedStudent;
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO, 'Successfully updated.'));
 	}
 
 	public Blob getFile() {
